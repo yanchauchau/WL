@@ -46,24 +46,15 @@ function App() {
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
         <Stack direction="row" gap="0">
-          <Box flex="1" bg="red.100" fontSize="xl" p={16}>
+          <Box flex="1" fontSize="xl" p={16}>
             <VStack spacing={8} minH="100vh" align="start">
               {/* <Logo h="10vmin" pointerEvents="none" /> */}
               <Text>Input for WL</Text>
-
               <HookForm />
-
-              <ButtonGroup>
-                <Button colorScheme="blue" variant="outline" size="lg">
-                  Clear
-                </Button>
-                <Button colorScheme="blue" size="lg">
-                  Generate JSON
-                </Button>
-              </ButtonGroup>
             </VStack>
           </Box>
           <Box flex="1" p={16}>
+          <input {...register("root.test1")} />
             <Textarea placeholder="Here is a sample placeholder" />
           </Box>
         </Stack>
