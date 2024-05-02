@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import HookForm from './hooks/HookForm'
+import HookForm from "./hooks/HookForm";
 import {
   ChakraProvider,
   Box,
@@ -28,7 +28,6 @@ import {
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Logo } from "./Logo";
 
-
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -45,18 +44,17 @@ function App() {
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
-        <Stack direction="row" gap="0">
-          <Box flex="1" fontSize="xl" p={16}>
-            <VStack spacing={8} minH="100vh" align="start">
-              {/* <Logo h="10vmin" pointerEvents="none" /> */}
-              <Text>Input for WL</Text>
-              <HookForm />
-            </VStack>
-          </Box>
-          <Box flex="1" p={16}>
-          <input {...register("root.test1")} />
+        <Stack direction="row" gap={8} fontSize="xl" p={16}>
+          <Stack direction="column" gap={8} flex="1" align="start">
+          <Text>Input for WL</Text>
+            <HookForm />
+          </Stack>
+          <Stack  direction="column" flex="1" gap={3}>
+            <Heading as="h2" size="md">
+              JSON
+            </Heading>
             <Textarea placeholder="Here is a sample placeholder" />
-          </Box>
+          </Stack>
         </Stack>
       </Stack>
     </ChakraProvider>
@@ -64,7 +62,6 @@ function App() {
 }
 
 export default App;
-
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(<App />);
