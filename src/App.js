@@ -3,30 +3,15 @@ import ReactDOM from "react-dom";
 import HookForm from "./hooks/HookForm";
 import {
   ChakraProvider,
-  Box,
   Text,
-  Button,
-  ButtonGroup,
-  Flex,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  VStack,
   Heading,
   Spacer,
   Stack,
-  Input,
-  Checkbox,
-  Container,
-  Code,
-  Grid,
   Textarea,
   theme,
-  Center,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Logo } from "./Logo";
+
 
 function App() {
   return (

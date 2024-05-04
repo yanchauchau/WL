@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+
 export default function HookForm() {
   const {
     handleSubmit,
@@ -61,6 +62,8 @@ export default function HookForm() {
             {errors.name2 && errors.name2.message}
           </FormErrorMessage>
         </FormControl>
+
+        
 
         <Button
           mt={4}
