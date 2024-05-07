@@ -1,1 +1,3 @@
-# WL JSON generator for me
+# WL JSON generator
+
+This is an experiemental project to try building a JSON generator for Eva.
