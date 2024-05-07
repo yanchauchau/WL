@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import HookForm from "./hooks/HookForm";
+import "./styles.css";
+
 import {
   ChakraProvider,
   Text,
@@ -36,9 +38,9 @@ function App() {
           </Stack>
           <Stack  direction="column" flex="1" gap={3}>
             <Heading as="h2" size="md">
-              JSON
+              JSON testing area
             </Heading>
-            <Textarea placeholder="Here is a sample placeholder" />
+            <Textarea id="formValuesTextArea" placeholder="Here is a sample placeholder" rows="10" cols="50" />
           </Stack>
         </Stack>
       </Stack>

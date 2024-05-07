@@ -9,7 +9,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-
 export default function HookForm() {
   const {
     handleSubmit,
@@ -17,21 +16,38 @@ export default function HookForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // function onSubmit(values) {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       alert(JSON.stringify(values, null, 2));
+  //       resolve();
+  //     }, 3000);
+  //   });
+  // }
+
   function onSubmit(values) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+        // Accessing the textarea element by its ID
+        const textArea = document.getElementById("formValuesTextArea");
+
+        // If the textarea element exists
+        if (textArea) {
+          // Stringify the values and set it as the textarea's value
+          textArea.value = JSON.stringify(values, null, 2);
+        }
+
         resolve();
-      }, 3000);
+      }, 1000);
     });
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack spacing={3} align='start'>
+      <VStack spacing={3} align="start">
         <FormControl isInvalid={errors.name}>
           <FormLabel htmlFor="name">Primary color</FormLabel>
-          <Input
+         <Input
             id="primary-color"
             placeholder="#000000"
             {...register("name", {
@@ -62,8 +78,6 @@ export default function HookForm() {
             {errors.name2 && errors.name2.message}
           </FormErrorMessage>
         </FormControl>
-
-        
 
         <Button
           mt={4}
