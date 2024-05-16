@@ -1,11 +1,19 @@
 .input-container {
-    position: relative;
-  }
-  
-  .prefix {
-    position: absolute;
-    left: 10px; /* Adjust as needed */
-    top: 50%; /* Adjust as needed */
-    transform: translateY(-0%);
-    pointer-events: none; /* Ensure the prefix doesn't intercept clicks */
-  }
+  position: relative;
+}
+
+.prefix {
+  position: absolute;
+  left: 10px;
+  /* Adjust as needed */
+  top: 50%;
+  /* Adjust as needed */
+  transform: translateY(-0%);
+  pointer-events: none;
+  /* Ensure the prefix doesn't intercept clicks */
+}
+
+#json {
+  vertical-align: middle;
+  height: 1.75rem;
+}
