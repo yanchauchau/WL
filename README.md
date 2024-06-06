@@ -1,5 +1,5 @@
 ---
-permalink: /public/index.html
+permalink: /src/index.js
 ---
 
 <!-- # WL JSON generator
