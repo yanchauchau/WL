@@ -12,12 +12,14 @@ import {
   Stack,
   Textarea,
   theme,
-  Center,
+  Box,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
 function App() {
   const [isCopied, setIsCopied] = useState(false);
+  const [paletteColor, setPaletteColor] = useState(''); // State for palette color
+  const [contrast, setContrast] = useState(0); // State for contrast
 
   const copyToClipboard = () => {
     const textArea = document.getElementById("formValuesTextArea");
@@ -31,6 +33,12 @@ function App() {
     }
   };
 
+  // Callback function to handle palette color and contrast from HookForm
+  const handlePaletteGenerated = (color, contrastValue) => {
+    setPaletteColor(color);
+    setContrast(contrastValue);
+  };
+
   return (
     <ChakraProvider theme={theme}>
       <Stack direction={"column"} gap={0}>
@@ -42,21 +50,28 @@ function App() {
           bg="yellow.100"
           p={4}
         >
-          <Heading size="md">White label JSON generatorrrr </Heading>
+          <Heading as="h1" size="md">White label JSON generatorrrr</Heading>
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
         <Stack direction="row" gap={8} fontSize="xl" p={16}>
           <Stack direction="column" gap={8} flex="1" align="start">
-            <Text>Input for WL</Text>
-            <HookForm />
+            <Heading as="h2" size="md">
+              Input
+            </Heading>
+            <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
           <Stack direction="column" flex="1" gap={3}>
-            <Stack  id="json"  direction="row" gap={8} justify={"space-between"} p={0}>
+            <Stack
+              id="json"
+              direction="row"
+              gap={8}
+              justify={"space-between"}
+              p={0}
+            >
               <Heading as="h2" size="md">
-                JSON testing area
+                Output
               </Heading>
-              {/* Conditionally render the button or text based on isCopied */}
               {isCopied ? (
                 <Text fontSize="sm" color="teal.500">
                   Copied!
@@ -79,6 +94,19 @@ function App() {
               rows="20"
               cols="1"
             />
+            {/* Display the palette color */}
+            <Text>Generated Color: {paletteColor}</Text>
+            {/* Add a square with the generated color */}
+            <Box
+              width="100px"
+              height="100px"
+              backgroundColor={paletteColor}
+            />
+            {/* Display the contrast */}
+            
+
+            <Text>Contrast: {contrast}</Text>
+            <Text>Contrast: {contrast}</Text>
           </Stack>
         </Stack>
       </Stack>
