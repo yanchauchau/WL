@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import HookForm from "./hooks/HookForm";
 import "./styles.css";
-import { FaRegCopy } from "react-icons/fa6";
+import { FaRegCopy } from "react-icons/fa";
 import {
   ChakraProvider,
   Text,
@@ -13,6 +13,10 @@ import {
   Textarea,
   theme,
   Box,
+  Checkbox,
+  Input,
+  FormLabel,
+  FormControl
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
@@ -20,6 +24,8 @@ function App() {
   const [isCopied, setIsCopied] = useState(false);
   const [paletteColor, setPaletteColor] = useState(''); // State for palette color
   const [contrast, setContrast] = useState(0); // State for contrast
+  const [demo, setDemo] = useState(false); // demo boolean for checkbox
+  const [demoText, setDemoText] = useState(""); // demo text for textbox
 
   const copyToClipboard = () => {
     const textArea = document.getElementById("formValuesTextArea");
@@ -59,6 +65,26 @@ function App() {
             <Heading as="h2" size="md">
               Input
             </Heading>
+            {/* this is basically a separate form for all the auxilliary stuff you'd want in your json */}
+            <FormControl>
+              <FormLabel htmlFor='demo-checkbox'>Demo Checkbox</FormLabel>
+              <Checkbox isChecked={demo} onChange={(e) => setDemo(!demo)} />
+              {/* the notation below basically checks if demo is true or false */}
+              { demo ? 
+                // if true, it will render the first option here
+                <>
+                  <FormLabel htmlFor='demo'>Demo Input</FormLabel>
+                  <Input 
+                    id='demo' 
+                    value={demoText} 
+                    onChange={(e) => setDemoText(e.target.value)} 
+                    placeholder='Demo placeholder'
+                  />
+                </>
+              : 
+                // if false, it will render whatever is after the colon (in this case nothing)
+                <></>}
+            </FormControl>
             <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
           <Stack direction="column" flex="1" gap={3}>
