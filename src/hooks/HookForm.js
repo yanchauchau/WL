@@ -25,29 +25,49 @@ export default function HookForm({ onPaletteGenerated }) {
         const palette = getPalette(primaryColor);
 
         if (textArea) {
-          let resultString = `{
-            primaryColor: "${primaryColor}",
-            linkColor: "${values.link}",
-            secondaryColor: "${values.name3}",
-            "colors": {
-             "primary": {
-                light: "${palette[0]}",
-                fill: "${palette[1]}",
-                200: "${palette[2]}",
-                border: "${palette[3]}",
-                400: "${palette[4]}",
-                main: "${primaryColor}", // Use primary color as the 500 shade
-                dark: "${palette[5]}",
-                700: "${palette[6]}",
-                800: "${palette[7]}",
-                900: "${palette[8]}",
-              },
-            },
+          let resultString = 
+          `{
+            "font": {
+                  "main": "\"Inter\", \"Helvetica\", \"Arial\", sans-serif"
+                },
+                "logos": {
+                  "app": "https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png",
+                  "favicon": "https://app.passthrough.com/passthrough_prod_emails/embark-favicon.png",
+                  "width_in_email": 220
+                },
+                "colors": {
+                  "link": "${values.link}",
+                      "primary": {
+                          "dark": "${palette[6]}",
+                          "fill": "${palette[1]}",
+                          "main": "#${primaryColor}",
+                          "light": "${palette[0]}",
+                          "border": "${palette[3]}",
+                          "contrast_text": "#000000"
+                      },
+                      "secondary": {
+                          "main": "${values.name3}",
+                          "contrast_text": "#000000"
+                      },
+                      "dark_mode_link": "#82ceea",
+                      "investor_closing_status": {
+                          "sent": "#f7941d",
+                          "signed": "#82ceea",
+                          "unsent": "",
+                          "approved": "#005b90",
+                          "executed": "#79ad3d",
+                          "not_started": "#fbd913",
+                          "partially_signed": "#7dcdcb"
+                      }
+                },
+                "product_name": "Goodwin Embark",
+                "kustomer_brand": "665a1fc74b597b6af45e7647"
           }`;
+
           textArea.value = resultString;
         }
 
-        // Calculate contrast between palette[2] and palette[8]
+        // Calculate contrast between Passthrough background and link(light)
         const contrast = chroma.contrast("#F9FAFB", values.link);
 
         // Call the callback function with the desired color and contrast
