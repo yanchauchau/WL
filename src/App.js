@@ -50,10 +50,11 @@ function App() {
           minHeight="4rem"
           alignItems="center"
           gap={0}
-          // bg="yellow.100"
+     
           p={8}
         >
-          <Heading as="h1" size="lg">
+          <Heading as="h1" size="lg"  bgGradient="linear(to-l, #30cfd0, #330867)"
+  bgClip="text">
             White label JSON generatorrrr
           </Heading>
           <Spacer />
@@ -64,7 +65,6 @@ function App() {
             <Heading as="h2" size="md">
               1. ✍️ Fill out this form
             </Heading>
-
             <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
           <Stack direction="column" flex="1" gap={3}>

@@ -3,11 +3,19 @@ import React, { useState, useEffect } from "react";
 import chroma from "chroma-js";
 
 import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Alert,
+  AlertIcon,
   Box,
   FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
+  Divider,
   Textarea,
   Select,
   Checkbox,
@@ -24,11 +32,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Flex,
 } from "@chakra-ui/react";
 
 export default function HookForm({ onPaletteGenerated }) {
-  
   const [rebrand, setRebrand] = useState(false); // rebrand boolean for checkbox
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false); // Track initial checkbox state
   const {
@@ -37,8 +43,42 @@ export default function HookForm({ onPaletteGenerated }) {
     setValue,
     formState: { errors, isSubmitting },
     getValues,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      // brandLogo:
+      //   "https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png",
+      primaryMain: "FF9800",
+      secondaryMain: "F7C164",
+      link: "3A72F2",
+      linkDark: "5CB06D",
+      // statusUnsent: "ccd0d7",
+      // statusSent: "FF9800",
+      // statusNotStarted: "F7C164",
+      // statusSigned: "9ABAEF",
+      // statusApproved: "3A72F2",
+      // statusExecuted: "5CB06D",
+    },
+  });
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const processFormValues = (values) => {
+    const statusFields = [
+      "statusUnsent",
+      "statusSent",
+      "statusNotStarted",
+      "statusSigned",
+      "statusApproved",
+      "statusExecuted",
+    ];
+
+    statusFields.forEach((field) => {
+      if (values[field]) {
+        values[field] = `#${values[field]}`;
+      }
+    });
+
+    return values;
+  };
 
   useEffect(() => {
     const values = {
@@ -91,82 +131,91 @@ export default function HookForm({ onPaletteGenerated }) {
       setTimeout(() => {
         const textArea = document.getElementById("formValuesTextArea");
         const primaryMain = values.primaryMain;
-        const secondaryMain = values.secondaryyMain;
+        // const secondaryMain = values.secondaryyMain;
         const palette = getPalette(primaryMain);
         const productName = values.productName || "";
         const kustomerId = values.kustomerId || "";
-        
-// // Your existing function to get the background color
-// function getBackgroundColor() {
-//   // Example background color, replace this with your actual logic
-//   return primaryMain;
-// }
-const primaryBackgroundColor = primaryMain; // Replace with actual primary background color
-const secondaryBackgroundColor = secondaryMain; // Use secondaryMain for secondary contrast
 
-// Function to determine the best text color for primary
-function getcontrastTextColorPrimary(primaryBackgroundColor) {
-  const black = '#000000';
-  const white = '#ffffff';
+        const primaryBackgroundColor = primaryMain; // Replace with actual primary background color
+        const secondaryBackgroundColor = values.secondaryMain; // Replace with actual secondary background color
 
-  // Calculate contrast ratios
-  const contrastWithBlack = chroma.contrast(primaryBackgroundColor, black);
-  const contrastWithWhite = chroma.contrast(primaryBackgroundColor, white);
+        // Function to determine the best text color for primary
+        function getcontrastTextColorPrimary(primaryBackgroundColor) {
+          const black = "#000000";
+          const white = "#ffffff";
 
-  // Check if either contrast ratio meets the 4.5:1 standard
-  if (contrastWithBlack >= 4.5 && contrastWithWhite >= 4.5) {
-    // Both colors pass, choose the one with higher contrast
-    return contrastWithBlack > contrastWithWhite ? black : white;
-  } else if (contrastWithBlack >= 4.5) {
-    // Only black passes
-    return black;
-  } else if (contrastWithWhite >= 4.5) {
-    // Only white passes
-    return white;
-  } else {
-    // Neither color passes, choose the one with the highest contrast
-    return contrastWithBlack > contrastWithWhite ? black : white;
-  }
-}
+          // Calculate contrast ratios
+          const contrastWithBlack = chroma.contrast(
+            primaryBackgroundColor,
+            black
+          );
+          const contrastWithWhite = chroma.contrast(
+            primaryBackgroundColor,
+            white
+          );
 
-// Function to determine the best text color for secondary
-function getcontrastTextColorSecondary() {
-  const black = '#000000';
-  const white = '#ffffff';
+          // Check if either contrast ratio meets the 4.5:1 standard
+          if (contrastWithBlack >= 4.5 && contrastWithWhite >= 4.5) {
+            // Both colors pass, choose the one with higher contrast
+            return contrastWithBlack > contrastWithWhite ? black : white;
+          } else if (contrastWithBlack >= 4.5) {
+            // Only black passes
+            return black;
+          } else if (contrastWithWhite >= 4.5) {
+            // Only white passes
+            return white;
+          } else {
+            // Neither color passes, choose the one with the highest contrast
+            return contrastWithBlack > contrastWithWhite ? black : white;
+          }
+        }
 
-  // Calculate contrast ratios
-  const contrastWithBlack = chroma.contrast(secondaryBackgroundColor, black);
-  const contrastWithWhite = chroma.contrast(secondaryBackgroundColor, white);
+        // Function to determine the best text color for secondary
+        function getcontrastTextColorSecondary(secondaryBackgroundColor) {
+          const black = "#000000";
+          const white = "#ffffff";
 
-  // Check if either contrast ratio meets the 4.5:1 standard
-  if (contrastWithBlack >= 4.5 && contrastWithWhite >= 4.5) {
-    // Both colors pass, choose the one with higher contrast
-    return contrastWithBlack > contrastWithWhite ? black : white;
-  } else if (contrastWithBlack >= 4.5) {
-    // Only black passes
-    return black;
-  } else if (contrastWithWhite >= 4.5) {
-    // Only white passes
-    return white;
-  } else {
-    // Neither color passes, choose the one with the highest contrast
-    return contrastWithBlack > contrastWithWhite ? black : white;
-  }
-}
+          // Calculate contrast ratios
+          const contrastWithBlack = chroma.contrast(
+            secondaryBackgroundColor,
+            black
+          );
+          const contrastWithWhite = chroma.contrast(
+            secondaryBackgroundColor,
+            white
+          );
 
+          // Check if either contrast ratio meets the 4.5:1 standard
+          if (contrastWithBlack >= 4.5 && contrastWithWhite >= 4.5) {
+            // Both colors pass, choose the one with higher contrast
+            return contrastWithBlack > contrastWithWhite ? black : white;
+          } else if (contrastWithBlack >= 4.5) {
+            // Only black passes
+            return black;
+          } else if (contrastWithWhite >= 4.5) {
+            // Only white passes
+            return white;
+          } else {
+            // Neither color passes, choose the one with the highest contrast
+            return contrastWithBlack > contrastWithWhite ? black : white;
+          }
+        }
 
-const contrastTextColorPrimary = getcontrastTextColorPrimary(primaryBackgroundColor);
-const contrastTextColorSecondary = getcontrastTextColorSecondary(secondaryBackgroundColor);
+        // Process the values to add pound signs where needed
+        const processedValues = processFormValues(values);
 
-
-
-
+        const contrastTextColorPrimary = getcontrastTextColorPrimary(
+          primaryBackgroundColor
+        );
+        const contrastTextColorSecondary = getcontrastTextColorSecondary(
+          secondaryBackgroundColor
+        );
 
         if (textArea) {
           let resultString = `{
             "font": {
                   "main": "\\\"${values.fontFamily}\\\", \\\"Helvetica\\\", \\\"Arial\\\", sans-serif"
-                },
+                },  
                 "logos": {
                   "app": "${values.brandLogo}",
                   "favicon": "",
@@ -188,13 +237,12 @@ const contrastTextColorSecondary = getcontrastTextColorSecondary(secondaryBackgr
                       },
                       "dark_mode_link": "#${values.linkDark}",
                       "investor_closing_status": {
-                          "sent": "",
-                          "signed": "",
-                          "unsent": "",
-                          "approved": "",
-                          "executed": "",
-                          "not_started": "",
-                          "partially_signed": ""
+                         "unsent": "${values.statusUnsent}",
+                          "sent": "${values.statusSent}",
+                          "not_started": "${values.statusNotStarted}",
+                          "signed": "${values.statusSigned}",
+                          "approved": "${values.statusApproved}",
+                          "executed": "${values.statusExecuted}",
                       }
                 },
               "product_name": "${productName}",
@@ -224,18 +272,27 @@ const contrastTextColorSecondary = getcontrastTextColorSecondary(secondaryBackgr
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <VStack spacing={6} align="stretch">
-          <FormControl isInvalid={errors.brandLogo} isRequired>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate >
+        <VStack spacing={6} align="stretch" >
+          <Divider />
+          <Alert status="info" fontSize="sm">
+            <AlertIcon />
+           test
+          </Alert>
+          <FormControl isInvalid={errors.brandLogo} isRequired >
             <FormLabel htmlFor="brand-logo">Logo URL</FormLabel>
             <Textarea
               id="brand-logo"
-              placeholder="https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png"
               resize={"none"}
+              placeholder="https://app.passthrough.com/passthrough_prod_emails/..."
               {...register("brandLogo", {
                 required: "This field is required",
               })}
             />
+            <FormHelperText>
+              Must be uploaded to prod.<br></br> URL should start with{" "}
+              <i>app.passthrough.com/</i>
+            </FormHelperText>
             <FormErrorMessage>
               {errors.brandLogo && errors.brandLogo.message}
             </FormErrorMessage>
@@ -348,7 +405,6 @@ const contrastTextColorSecondary = getcontrastTextColorSecondary(secondaryBackgr
             </FormErrorMessage>
           </FormControl>
 
-
           <FormControl isInvalid={errors.fontFamily} isRequired>
             <FormLabel>Font family</FormLabel>
             <Select id="font-family" {...register("fontFamily", {})}>
@@ -364,6 +420,178 @@ const contrastTextColorSecondary = getcontrastTextColorSecondary(secondaryBackgr
             </FormErrorMessage>
           </FormControl>
 
+          <Accordion defaultIndex={[]} allowMultiple>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Status colors
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <VStack spacing={6} align="stretch">
+                  <FormControl isInvalid={errors.statusUnsent}>
+                    <FormLabel>Unsent</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusUnsent-color"
+                        name="statusUnsent"
+                        placeholder="000000"
+                        {...register("statusUnsent", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusUnsent && errors.statusUnsent.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.statusSent}>
+                    <FormLabel>Sent</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusSent-color"
+                        name="statusSent"
+                        placeholder="000000"
+                        {...register("statusSent", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusSent && errors.statusSent.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.statusNotStarted}>
+                    <FormLabel>Not Started</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusNotStarted-color"
+                        name="statusNotStarted"
+                        placeholder="000000"
+                        {...register("statusNotStarted", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusNotStarted &&
+                        errors.statusNotStarted.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.statusSigned}>
+                    <FormLabel>Signed</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusSigned-color"
+                        name="statusSigned"
+                        placeholder="000000"
+                        {...register("statusSigned", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusSigned && errors.statusSigned.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.statusApproved}>
+                    <FormLabel>Approved</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusApproved-color"
+                        name="statusApproved"
+                        placeholder="000000"
+                        {...register("statusApproved", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusApproved && errors.statusApproved.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.statusExecuted}>
+                    <FormLabel>Executed</FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>#</InputLeftAddon>
+                      <Input
+                        id="statusExecuted-color"
+                        name="statusExecuted"
+                        placeholder="000000"
+                        {...register("statusExecuted", {
+                          pattern: /^[a-zA-Z0-9]*$/,
+                          minLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                          maxLength: {
+                            value: 6,
+                            message: "Enter a valid 6-digit hex code",
+                          },
+                        })}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.statusExecuted && errors.statusExecuted.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                </VStack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
           <FormControl>
             <Checkbox isChecked={rebrand} onChange={handleCheckboxChange}>
               Advanced settings
