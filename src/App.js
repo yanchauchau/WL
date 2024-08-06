@@ -13,9 +13,9 @@ import {
   Textarea,
   theme,
   Box,
-  text,
   HStack,
-  VStack
+  VStack,
+  Divider
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
@@ -25,7 +25,6 @@ function App() {
   const [paletteColor2, setPaletteColor2] = useState(""); // State for palette color 2
   const [contrastLinkBg, setContrastLinkBg] = useState(0); // State for contrast
   const [contrastDarkLinkBg, setContrastDarkLinkBg] = useState(0); // State for contrast
-
 
   const copyToClipboard = () => {
     const textArea = document.getElementById("formValuesTextArea");
@@ -41,8 +40,8 @@ function App() {
 
   // Callback function to handle palette color and contrast from HookForm
   const handlePaletteGenerated = (color1, color2, contrastLinkBg, contrastDarkLinkBg) => {
-    setPaletteColor1(color1);
-    setPaletteColor2(color2);
+    setPaletteColor1('#' + color1);
+    setPaletteColor2('#' + color2);
     setContrastLinkBg(contrastLinkBg);
     setContrastDarkLinkBg(contrastDarkLinkBg);
   };
@@ -59,12 +58,13 @@ function App() {
         >
           <VStack align='start'><Heading as="h1" size="lg" bgGradient="linear(to-l, #30cfd0, #330867)"
             bgClip="text">
-            White label JSON generatorrrr
+            White label JSON generator
           </Heading>
-          <Text fontSize='xs'>Last updated on 09 Aug 2069</Text></VStack>
+            <Text fontSize='xs'>Last updated on 09 Aug 2069</Text></VStack>
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
+
         <Stack direction="row" gap={8} fontSize="xl" p={12} >
           <Stack direction="column" gap={8} flex="1" align="start">
             <Heading as="h2" size="md">
@@ -101,20 +101,19 @@ function App() {
             </Stack>
             <Textarea
               id="formValuesTextArea"
-              placeholder="Here is a sample placeholder"
+              placeholder=""
               rows="10"
               cols="1"
             />
-
 
             <Heading as="h2" size="md">
               Contrast checker
             </Heading>
 
-
             {/* Display the palette color */}
-            <Text>Generated Color1: {paletteColor1}</Text>
-            <Text>Generated Color2: {paletteColor2}</Text>
+            <Text fontSize='sm'>Generated Color1: {paletteColor1}</Text>
+            <Text fontSize='sm'>Generated Color2: {paletteColor2}</Text>
+            
             {/* Add a square with the generated color */}
             <HStack>
               <Box width='60px' height='60px' centerContent bg={paletteColor1} border="1px" borderColor='gray.300' />
@@ -122,9 +121,17 @@ function App() {
             </HStack>
 
             {/* Display the contrast */}
-            <Text>Contrast (link & bg): {contrastLinkBg}</Text>
-            <Text>Contras (Links in bulk action drawer) : {contrastDarkLinkBg}</Text>
+            <VStack align='start' gap={0}>
+              <Text fontSize='sm' id='contrast-link' color={contrastLinkBg}>Contrast(Link color on light background):</Text>
+              <Text fontSize='LG'>{contrastLinkBg}</Text>
+            </VStack>
+            
+            <VStack align='start' gap={0}>
+              <Text fontSize='sm'>Contrast(Links in bulk action drawer):</Text>
+              <Text fontSize='LG'>{contrastDarkLinkBg}</Text>
+            </VStack>
 
+            <Divider />
             <Heading as="h2" size="md">
               3. Paste to Asana task
             </Heading>

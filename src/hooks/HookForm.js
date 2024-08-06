@@ -46,13 +46,13 @@ export default function HookForm({ onPaletteGenerated }) {
     getValues,
   } = useForm({
     defaultValues: {
-      brandLogo:
-        "https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png",
+      // brandLogo:
+      //   "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
       logoWidth: "160",
-      primaryMain: "FF9800",
-      secondaryMain: "F7C164",
-      link: "3A72F2",
-      linkDark: "5CB06D",
+      // primaryMain: "FF9800",
+      // secondaryMain: "F7C164",
+      // link: "3A72F2",
+      // linkDark: "5CB06D",
       // statusUnsent: "ccd0d7",
       // statusSent: "FF9800",
       // statusNotStarted: "F7C164",
@@ -259,14 +259,14 @@ export default function HookForm({ onPaletteGenerated }) {
         }
 
         // Calculate contrast between Passthrough background and link(light)
-        const contrastLinkBg = chroma.contrast("#F9FAFB", values.link);
-        const contrastDarkLinkBg = chroma.contrast("#252A36", values.linkDark);
+        const contrastLinkBg = chroma.contrast("#F9FAFB", values.link).toFixed(2);
+        const contrastDarkLinkBg = chroma.contrast("#252A36", values.linkDark).toFixed(2);
 
         // Call the callback function with the desired color and contrast
         if (onPaletteGenerated) {
           onPaletteGenerated(values.link, values.linkDark, contrastLinkBg, contrastDarkLinkBg);
         }
-
+       
         resolve();
       }, 1000);
     });
@@ -282,12 +282,18 @@ export default function HookForm({ onPaletteGenerated }) {
       <form onSubmit={handleSubmit(onSubmit)} noValidate >
         <VStack spacing={6} align="stretch" >
           <Divider />
-          <Alert status="info" fontSize="sm">
+          {/* <Alert status="info" fontSize="sm">
             <AlertIcon />
             test
-          </Alert>
+          </Alert> */}
+          {/* <Alert status="error" fontSize="sm" id="alert-link">
+              <AlertIcon />
+              Link color on light background should have a contrast ratio of at least 4.5:1.
+            </Alert> */}
+
           <FormControl isInvalid={errors.brandLogo} isRequired >
-            <FormLabel htmlFor="brand-logo">Logo URL</FormLabel>
+            <FormLabel htmlFor="brand-logo">Organization logo</FormLabel>
+            
             <Textarea
               id="brand-logo"
               resize={"none"}
@@ -314,6 +320,9 @@ export default function HookForm({ onPaletteGenerated }) {
                 {...register("logoWidth")}
               /> <InputRightAddon>px</InputRightAddon>
             </InputGroup>
+            <FormHelperText>
+             Size of the brand's logo in emails
+            </FormHelperText>
             <FormErrorMessage>
               {errors.logoWidth && errors.logoWidth.message}
             </FormErrorMessage>
@@ -366,7 +375,7 @@ export default function HookForm({ onPaletteGenerated }) {
                 })}
               />
             </InputGroup>
-            <FormHelperText>Help text</FormHelperText>
+            <FormHelperText>Can be the same as primary color</FormHelperText>
             <FormErrorMessage>
               {errors.secondaryMain && errors.secondaryMain.message}
             </FormErrorMessage>
@@ -400,7 +409,7 @@ export default function HookForm({ onPaletteGenerated }) {
           </FormControl>
 
           <FormControl isInvalid={errors.linkDark} isRequired>
-            <FormLabel>Link (dark mode)</FormLabel>
+            <FormLabel>Link (reverse)</FormLabel>
             <InputGroup>
               <InputLeftAddon>#</InputLeftAddon>
               <Input
@@ -421,6 +430,9 @@ export default function HookForm({ onPaletteGenerated }) {
                 })}
               />
             </InputGroup>
+            <FormHelperText>
+              For links on dark background
+            </FormHelperText>
             <FormErrorMessage>
               {errors.linkDark && errors.linkDark.message}
             </FormErrorMessage>
