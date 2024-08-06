@@ -21,6 +21,7 @@ import {
   Checkbox,
   InputGroup,
   InputLeftAddon,
+  InputRightAddon,
   FormHelperText,
   Button,
   VStack,
@@ -45,8 +46,9 @@ export default function HookForm({ onPaletteGenerated }) {
     getValues,
   } = useForm({
     defaultValues: {
-      // brandLogo:
-      //   "https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png",
+      brandLogo:
+        "https://app.passthrough.com/passthrough_prod_emails/embark-logo-horz.png",
+      logoWidth: "160",
       primaryMain: "FF9800",
       secondaryMain: "F7C164",
       link: "3A72F2",
@@ -84,12 +86,13 @@ export default function HookForm({ onPaletteGenerated }) {
     const values = {
       productName: getValues("productName"),
       kustomerId: getValues("kustomerId"),
+      favicon: getValues("favicon"),
     };
 
     if (
       !rebrand &&
       isCheckboxChecked &&
-      (values.productName || values.kustomerId)
+      (values.productName || values.kustomerId || values.favicon)
     ) {
       onOpen(); // Open the modal if rebrand is false, checkbox was checked, and either productName or kustomerId contains a value
     }
@@ -103,9 +106,10 @@ export default function HookForm({ onPaletteGenerated }) {
       const values = {
         productName: getValues("productName"),
         kustomerId: getValues("kustomerId"),
+        favicon: getValues("favicon"),
       };
 
-      if (values.productName || values.kustomerId) {
+      if (values.productName || values.kustomerId || values.favicon) {
         onOpen(); // Open the modal only if either productName or kustomerId has a value
       } else {
         setRebrand(false); // Directly set rebrand to false if no values exist
@@ -116,6 +120,7 @@ export default function HookForm({ onPaletteGenerated }) {
   const confirmClear = () => {
     setValue("productName", "");
     setValue("kustomerId", "");
+    setValue("favicon", "");
     setRebrand(false); // Confirm and set rebrand to false
     onClose();
   };
@@ -135,6 +140,7 @@ export default function HookForm({ onPaletteGenerated }) {
         const palette = getPalette(primaryMain);
         const productName = values.productName || "";
         const kustomerId = values.kustomerId || "";
+        const favicon = values.favicon || "";
 
         const primaryBackgroundColor = primaryMain; // Replace with actual primary background color
         const secondaryBackgroundColor = values.secondaryMain; // Replace with actual secondary background color
@@ -218,9 +224,9 @@ export default function HookForm({ onPaletteGenerated }) {
                 },  
                 "logos": {
                   "app": "${values.brandLogo}",
-                  "favicon": "",
-                  "width_in_email": 220
-                },
+                  "favicon": "${favicon}",
+                  "width_in_email": "${values.logoWidth}"
+},
                 "colors": {
                   "link": "#${values.link}",
                       "primary": {
@@ -242,7 +248,7 @@ export default function HookForm({ onPaletteGenerated }) {
                           "not_started": "${values.statusNotStarted}",
                           "signed": "${values.statusSigned}",
                           "approved": "${values.statusApproved}",
-                          "executed": "${values.statusExecuted}",
+                          "executed": "${values.statusExecuted}"
                       }
                 },
               "product_name": "${productName}",
@@ -253,11 +259,12 @@ export default function HookForm({ onPaletteGenerated }) {
         }
 
         // Calculate contrast between Passthrough background and link(light)
-        const contrast = chroma.contrast("#F9FAFB", values.link);
+        const contrastLinkBg = chroma.contrast("#F9FAFB", values.link);
+        const contrastDarkLinkBg = chroma.contrast("#252A36", values.linkDark);
 
         // Call the callback function with the desired color and contrast
         if (onPaletteGenerated) {
-          onPaletteGenerated(palette[2], palette[6], contrast);
+          onPaletteGenerated(values.link, values.linkDark, contrastLinkBg, contrastDarkLinkBg);
         }
 
         resolve();
@@ -277,7 +284,7 @@ export default function HookForm({ onPaletteGenerated }) {
           <Divider />
           <Alert status="info" fontSize="sm">
             <AlertIcon />
-           test
+            test
           </Alert>
           <FormControl isInvalid={errors.brandLogo} isRequired >
             <FormLabel htmlFor="brand-logo">Logo URL</FormLabel>
@@ -295,6 +302,20 @@ export default function HookForm({ onPaletteGenerated }) {
             </FormHelperText>
             <FormErrorMessage>
               {errors.brandLogo && errors.brandLogo.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={errors.logoWidth} isRequired>
+            <FormLabel>Logo width</FormLabel>
+            <InputGroup>
+              <Input
+                id="logoWidth"
+                name="logoWidth"
+                {...register("logoWidth")}
+              /> <InputRightAddon>px</InputRightAddon>
+            </InputGroup>
+            <FormErrorMessage>
+              {errors.logoWidth && errors.logoWidth.message}
             </FormErrorMessage>
           </FormControl>
 
@@ -602,13 +623,34 @@ export default function HookForm({ onPaletteGenerated }) {
             <>
               <FormControl>
                 <FormLabel htmlFor="product-name">Product name</FormLabel>
-                <Input id="product-name" {...register("productName", {})} />
+                <Input id="product-name" placeholder="Passthrough" {...register("productName", {
+
+                })} />
               </FormControl>
+
+              <FormControl isInvalid={errors.favicon} >
+                <FormLabel htmlFor="favicon">Favicon URL</FormLabel>
+                <Textarea
+                  id="favicon"
+                  resize={"none"}
+                  placeholder="https://app.passthrough.com/passthrough_prod_emails/..."
+                  {...register("favicon", {
+                  })}
+                />
+                <FormHelperText>
+                  Must be uploaded to prod.<br></br> URL should start with{" "}
+                  <i>app.passthrough.com/</i>
+                </FormHelperText>
+                <FormErrorMessage>
+                  {errors.favicon && errors.favicon.message}
+                </FormErrorMessage>
+              </FormControl>
+
+
               <FormControl isInvalid={errors.kustomerId}>
                 <FormLabel htmlFor="kustomer-id">Kustomer brand ID</FormLabel>
                 <Input
                   id="kustomer-id"
-                  placeholder="Demo placeholder"
                   {...register("kustomerId", {
                     minLength: {
                       value: 24,
@@ -620,7 +662,7 @@ export default function HookForm({ onPaletteGenerated }) {
                     },
                   })}
                 />
-                <FormHelperText>Help text</FormHelperText>
+                <FormHelperText>This ID controls the Kustomer widget in Passthrough. <br></br>It must be created in Kustomer first.</FormHelperText>
                 <FormErrorMessage>
                   {errors.kustomerId && errors.kustomerId.message}
                 </FormErrorMessage>
