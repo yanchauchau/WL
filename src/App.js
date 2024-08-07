@@ -85,7 +85,7 @@ function App() {
             >
               White label JSON generator
             </Heading>
-            <Text fontSize="xs">Last updated on 09 Aug 2069</Text>
+            <Text fontSize="xs">Last updated on 07 Aug 2024</Text>
           </VStack>
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
@@ -103,101 +103,6 @@ function App() {
               <Heading as="h2" size="md">
                 2. Check contrast
               </Heading>
-
-              {/* Display the palette color */}
-              <Text fontSize="sm">Generated Color1: {primaryBorder}</Text>
-              <Text fontSize="sm">Generated Color2: {paletteColor2}</Text>
-              <Text fontSize="sm">Primary: {primaryMain}</Text>
-              <Text fontSize="sm">Secondary: {secondaryMain}</Text>
-              <Text fontSize="sm">
-                Contrast text: {contrastTextColorPrimary}
-              </Text>
-              <Text fontSize="sm">
-                Contrast text: {contrastTextColorSecondary}
-              </Text>
-
-              {/* Add a square with the generated color */}
-              <Grid
-                fontSize="xs"
-                templateColumns="repeat(5, 1fr)"
-                gap={2}
-                alignItems={"center"}
-                textAlign={"center"}
-              >
-                <GridItem w="100%" colStart={1} rowStart={2}>
-                  <Text>Primary</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={2}>
-                  <Text>Light</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={3}>
-                  <Text>Fill</Text>
-                </GridItem>{" "}
-                <GridItem w="100%" colStart={4}>
-                  <Text>Border</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={5}>
-                  <Text>Main</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={6}>
-                  <Text>Dark</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={1} rowStart={4}>
-                  <Text>Secondary</Text>
-                </GridItem>
-                <GridItem w="100%" colStart={5} rowStart={2}>
-                  <Center
-                    w="48px"
-                    h="48px"
-                    m={["auto"]}
-                    borderRadius={100}
-                    bg={primaryMain}
-                    border="1px"
-                    borderColor="gray.300"
-                    color={contrastTextColorPrimary}
-                  >
-                    Text
-                  </Center>
-                </GridItem>
-
-                <GridItem w="100%" colStart={4} rowStart={2}>
-                  <Center
-                    w="48px"
-                    h="48px"
-                    m={["auto"]}
-                    borderRadius={100}
-                    bg={primaryBorder}
-                    border="1px"
-                    borderColor="gray.300"
-                  />
-                </GridItem>
-                <GridItem w="100%" colStart={4} rowStart={4}>
-                  <Center
-                    w="48px"
-                    h="48px"
-                    m={["auto"]}
-                    borderRadius={100}
-                    bg={secondaryMain}
-                    border="1px"
-                    borderColor="gray.300"
-                    color={contrastTextColorSecondary}
-                  >
-                    Text
-                  </Center>
-                </GridItem>
-                <GridItem w="100%" colStart={2} rowStart={2}>
-                  <Center
-                    w="48px"
-                    h="48px"
-                    m={["auto"]}
-                    borderRadius={100}
-                    bg={secondaryMain}
-                    border="1px"
-                    borderColor="gray.300"
-                    color={contrastTextColorSecondary}
-                  />
-                </GridItem>
-              </Grid>
 
               {/* Display the contrast */}
               <VStack align="start" gap={0}>
@@ -260,6 +165,107 @@ function App() {
                       <Text color="green.500">✅</Text>
                     ))}
                 </HStack>
+              </VStack>
+            </VStack>
+
+            <VStack spacing={4} align="start">
+              <Heading as="h2" size="sm">
+                Generated palette
+              </Heading>
+              {/* Add a square with the generated color */}
+              <Grid
+                fontSize="xs"
+                templateColumns="repeat(5, 1fr)"
+                gap={2}
+                alignItems={"center"}
+                textAlign={"center"}
+              >
+                <GridItem w="100%" colStart={1} rowStart={2}>
+                  <Text>Primary</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={2}>
+                  <Text>Light</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={3}>
+                  <Text>Fill</Text>
+                </GridItem>{" "}
+                <GridItem w="100%" colStart={4}>
+                  <Text>Border</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={5}>
+                  <Text>Main</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={6}>
+                  <Text>Dark</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={1} rowStart={4}>
+                  <Text>Secondary</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={5} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorPrimary}
+                  >
+                    Text
+                  </Center>
+                </GridItem>
+                <GridItem w="100%" colStart={4} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryBorder}
+                    border="1px"
+                    borderColor="gray.300"
+                  />
+                </GridItem>
+                <GridItem w="100%" colStart={4} rowStart={4}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={secondaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorSecondary}
+                  >
+                    Text
+                  </Center>
+                </GridItem>
+                <GridItem w="100%" colStart={2} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={secondaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorSecondary}
+                  />
+                </GridItem>
+              </Grid>
+              <VStack align="start" spacing={2} bgColor="lightyellow" w='100%'p={4}>
+                {/* Display the palette color */}
+                <Text fontSize="xs" >FOR TESTING ONLY</Text>
+                <Text fontSize="sm">Generated Color1: {primaryBorder}</Text>
+                <Text fontSize="sm">Generated Color2: {paletteColor2}</Text>
+                <Text fontSize="sm">Primary: {primaryMain}</Text>
+                <Text fontSize="sm">Secondary: {secondaryMain}</Text>
+                <Text fontSize="sm">
+                  Contrast text: {contrastTextColorPrimary}
+                </Text>
+                <Text fontSize="sm">
+                  Contrast text: {contrastTextColorSecondary}
+                </Text>
               </VStack>
             </VStack>
             <VStack spacing={4} align="start">
