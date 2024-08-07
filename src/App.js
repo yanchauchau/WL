@@ -6,23 +6,29 @@ import { FaRegCopy } from "react-icons/fa";
 import {
   ChakraProvider,
   Text,
+  Center,
   Button,
   Heading,
   Spacer,
   Stack,
   Textarea,
   theme,
-  Box,
   HStack,
   VStack,
-  Divider
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
 function App() {
   const [isCopied, setIsCopied] = useState(false);
-  const [paletteColor1, setPaletteColor1] = useState(""); // State for palette color 1
   const [paletteColor2, setPaletteColor2] = useState(""); // State for palette color 2
+  const [primaryMain, setPrimaryMain] = useState(""); // State for Primary Main
+  const [secondaryMain, setSecondaryMain] = useState(""); // State for Secondary Main
+  const [primaryBorder, setPrimaryBorder] = useState(""); // State for palette color 1
+  const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(""); // State for Contrast text for primary
+  const [contrastTextColorSecondary, setContrastTextColorSecondary] =
+    useState(""); // State for Contrast text for secondary
   const [contrastLinkBg, setContrastLinkBg] = useState(0); // State for contrast
   const [contrastDarkLinkBg, setContrastDarkLinkBg] = useState(0); // State for contrast
 
@@ -39,9 +45,23 @@ function App() {
   };
 
   // Callback function to handle palette color and contrast from HookForm
-  const handlePaletteGenerated = (color1, color2, contrastLinkBg, contrastDarkLinkBg) => {
-    setPaletteColor1('#' + color1);
-    setPaletteColor2('#' + color2);
+  const handlePaletteGenerated = (
+    color1,
+    color2,
+    contrastLinkBg,
+    contrastDarkLinkBg,
+    primaryMain,
+    secondaryMain,
+    primaryBorder,
+    contrastTextColorPrimary,
+    contrastTextColorSecondary
+  ) => {
+    setPaletteColor2("#" + color2);
+    setPrimaryMain("#" + primaryMain);
+    setSecondaryMain("#" + secondaryMain);
+    setPrimaryBorder(primaryBorder);
+    setContrastTextColorPrimary(contrastTextColorPrimary);
+    setContrastTextColorSecondary(contrastTextColorSecondary);
     setContrastLinkBg(contrastLinkBg);
     setContrastDarkLinkBg(contrastDarkLinkBg);
   };
@@ -56,92 +76,228 @@ function App() {
           gap={0}
           p={8}
         >
-          <VStack align='start'><Heading as="h1" size="lg" bgGradient="linear(to-l, #30cfd0, #330867)"
-            bgClip="text">
-            White label JSON generator
-          </Heading>
-            <Text fontSize='xs'>Last updated on 09 Aug 2069</Text></VStack>
+          <VStack align="start">
+            <Heading
+              as="h1"
+              size="lg"
+              bgGradient="linear(to-l, #30cfd0, #330867)"
+              bgClip="text"
+            >
+              White label JSON generator
+            </Heading>
+            <Text fontSize="xs">Last updated on 09 Aug 2069</Text>
+          </VStack>
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
 
-        <Stack direction="row" gap={8} fontSize="xl" p={12} >
+        <Stack direction="row" gap={6} fontSize="xl" p={8}>
           <Stack direction="column" gap={8} flex="1" align="start">
             <Heading as="h2" size="md">
               1. ✍️ Fill out this form
             </Heading>
             <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
-          <Stack direction="column" flex="1" gap={3}>
-            <Stack
-              id="json"
-              direction="row"
-              gap={8}
-              justify={"space-between"}
-              p={0}
-            >
+          <Stack direction="column" flex="1" gap={12}>
+            <VStack spacing={4} align="start">
               <Heading as="h2" size="md">
-                2. Copy JSON here
+                2. Check contrast
               </Heading>
-              {isCopied ? (
-                <Text fontSize="sm" color="teal.500">
-                  Copied!
-                </Text>
-              ) : (
-                <Button
-                  leftIcon={<FaRegCopy />}
-                  colorScheme="teal"
-                  size="sm"
-                  variant="outline"
-                  onClick={copyToClipboard}
+
+              {/* Display the palette color */}
+              <Text fontSize="sm">Generated Color1: {primaryBorder}</Text>
+              <Text fontSize="sm">Generated Color2: {paletteColor2}</Text>
+              <Text fontSize="sm">Primary: {primaryMain}</Text>
+              <Text fontSize="sm">Secondary: {secondaryMain}</Text>
+              <Text fontSize="sm">
+                Contrast text: {contrastTextColorPrimary}
+              </Text>
+              <Text fontSize="sm">
+                Contrast text: {contrastTextColorSecondary}
+              </Text>
+
+              {/* Add a square with the generated color */}
+              <Grid
+                fontSize="xs"
+                templateColumns="repeat(5, 1fr)"
+                gap={2}
+                alignItems={"center"}
+                textAlign={"center"}
+              >
+                <GridItem w="100%" colStart={1} rowStart={2}>
+                  <Text>Primary</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={2}>
+                  <Text>Light</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={3}>
+                  <Text>Fill</Text>
+                </GridItem>{" "}
+                <GridItem w="100%" colStart={4}>
+                  <Text>Border</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={5}>
+                  <Text>Main</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={6}>
+                  <Text>Dark</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={1} rowStart={4}>
+                  <Text>Secondary</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={5} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorPrimary}
+                  >
+                    Text
+                  </Center>
+                </GridItem>
+
+                <GridItem w="100%" colStart={4} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryBorder}
+                    border="1px"
+                    borderColor="gray.300"
+                  />
+                </GridItem>
+                <GridItem w="100%" colStart={4} rowStart={4}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={secondaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorSecondary}
+                  >
+                    Text
+                  </Center>
+                </GridItem>
+                <GridItem w="100%" colStart={2} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={secondaryMain}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={contrastTextColorSecondary}
+                  />
+                </GridItem>
+              </Grid>
+
+              {/* Display the contrast */}
+              <VStack align="start" gap={0}>
+                <Text
+                  fontSize="sm"
+                  color={
+                    contrastLinkBg > 0 && contrastLinkBg < 4.5
+                      ? "red.500"
+                      : "Black"
+                  }
                 >
-                  Copy
-                </Button>
-              )}
-            </Stack>
-            <Textarea
-              id="formValuesTextArea"
-              placeholder=""
-              rows="10"
-              cols="1"
-            />
+                  Contrast(Link color on light background):
+                </Text>
+                <HStack>
+                  <Text
+                    fontSize="LG"
+                    color={
+                      contrastLinkBg > 0 && contrastLinkBg < 4.5
+                        ? "red.500"
+                        : "Black"
+                    }
+                  >
+                    {contrastLinkBg}
+                  </Text>
+                  {contrastLinkBg > 0 &&
+                    (contrastLinkBg < 4.5 ? (
+                      <Text color="red.500">❌</Text>
+                    ) : (
+                      <Text color="Black">✅</Text>
+                    ))}
+                </HStack>
+              </VStack>
 
-            <Heading as="h2" size="md">
-              Contrast checker
-            </Heading>
-
-            {/* Display the palette color */}
-            <Text fontSize='sm'>Generated Color1: {paletteColor1}</Text>
-            <Text fontSize='sm'>Generated Color2: {paletteColor2}</Text>
-            
-            {/* Add a square with the generated color */}
-            <HStack>
-              <Box width='60px' height='60px' centerContent bg={paletteColor1} border="1px" borderColor='gray.300' />
-              <Box width='60px' height='60px' centerContent bg={paletteColor2} border="1px" borderColor='gray.300' />
-            </HStack>
-
-            {/* Display the contrast */}
-            <VStack align='start' gap={0}>
-              <Text fontSize='sm' id='contrast-link' color={contrastLinkBg}>Contrast(Link color on light background):</Text>
-              <Text fontSize='LG'>{contrastLinkBg}</Text>
+              <VStack align="start" gap={0}>
+                <Text
+                  fontSize="sm"
+                  color={
+                    contrastDarkLinkBg && contrastDarkLinkBg < 4.5
+                      ? "red.500"
+                      : "Black"
+                  }
+                >
+                  Contrast(Link color on light background):
+                </Text>
+                <HStack>
+                  <Text
+                    fontSize="LG"
+                    color={
+                      contrastDarkLinkBg && contrastDarkLinkBg < 4.5
+                        ? "red.500"
+                        : "black"
+                    }
+                  >
+                    {contrastDarkLinkBg}
+                  </Text>
+                  {contrastDarkLinkBg > 0 &&
+                    (contrastDarkLinkBg < 4.5 ? (
+                      <Text color="red.500">❌</Text>
+                    ) : (
+                      <Text color="green.500">✅</Text>
+                    ))}
+                </HStack>
+              </VStack>
             </VStack>
-            
-            <VStack align='start' gap={0}>
-              <Text fontSize='sm'>Contrast(Links in bulk action drawer):</Text>
-              <Text fontSize='LG'>{contrastDarkLinkBg}</Text>
+            <VStack spacing={4} align="start">
+              <Stack
+                id="json"
+                direction="row"
+                gap={8}
+                justify={"space-between"}
+                p={0}
+              >
+                <Heading as="h2" size="md" w="100%">
+                  3. Copy JSON here
+                </Heading>
+                {isCopied ? (
+                  <Text fontSize="sm" color="teal.500">
+                    Copied!
+                  </Text>
+                ) : (
+                  <Button
+                    leftIcon={<FaRegCopy />}
+                    colorScheme="teal"
+                    size="sm"
+                    variant="outline"
+                    onClick={copyToClipboard}
+                  >
+                    Copy
+                  </Button>
+                )}
+              </Stack>
+              <Textarea
+                id="formValuesTextArea"
+                placeholder=""
+                rows="20"
+                cols="1"
+              />
             </VStack>
-
-            <Divider />
-            <Heading as="h2" size="md">
-              3. Paste to Asana task
-            </Heading>
-            <Heading as="h2" size="md">
-              4. Paste to Django
-            </Heading>
           </Stack>
-
         </Stack>
-
       </Stack>
     </ChakraProvider>
   );

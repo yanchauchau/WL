@@ -8,8 +8,6 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Alert,
-  AlertIcon,
   Box,
   FormErrorMessage,
   FormLabel,
@@ -46,13 +44,13 @@ export default function HookForm({ onPaletteGenerated }) {
     getValues,
   } = useForm({
     defaultValues: {
-      // brandLogo:
-      //   "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
+      brandLogo:
+        "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
       logoWidth: "160",
-      // primaryMain: "FF9800",
-      // secondaryMain: "F7C164",
-      // link: "3A72F2",
-      // linkDark: "5CB06D",
+      primaryMain: "FF9800",
+      secondaryMain: "F7C164",
+      link: "3A72F2",
+      linkDark: "5CB06D",
       // statusUnsent: "ccd0d7",
       // statusSent: "FF9800",
       // statusNotStarted: "F7C164",
@@ -136,8 +134,9 @@ export default function HookForm({ onPaletteGenerated }) {
       setTimeout(() => {
         const textArea = document.getElementById("formValuesTextArea");
         const primaryMain = values.primaryMain;
-        // const secondaryMain = values.secondaryyMain;
         const palette = getPalette(primaryMain);
+        const secondaryMain = values.secondaryMain;
+        const primaryBorder = palette[3];
         const productName = values.productName || "";
         const kustomerId = values.kustomerId || "";
         const favicon = values.favicon || "";
@@ -230,11 +229,11 @@ export default function HookForm({ onPaletteGenerated }) {
                 "colors": {
                   "link": "#${values.link}",
                       "primary": {
-                          "dark": "${palette[6]}",
-                          "fill": "${palette[1]}",
-                          "main": "#${primaryMain}",
                           "light": "${palette[0]}",
+                          "fill": "${palette[1]}",
                           "border": "${palette[3]}",
+                          "main": "#${primaryMain}",
+                          "dark": "${palette[6]}",
                           "contrast_text": "${contrastTextColorPrimary}"
                       },
                       "secondary": {
@@ -259,41 +258,59 @@ export default function HookForm({ onPaletteGenerated }) {
         }
 
         // Calculate contrast between Passthrough background and link(light)
-        const contrastLinkBg = chroma.contrast("#F9FAFB", values.link).toFixed(2);
-        const contrastDarkLinkBg = chroma.contrast("#252A36", values.linkDark).toFixed(2);
+        const contrastLinkBg = chroma
+          .contrast("#F9FAFB", values.link)
+          .toFixed(2);
+        const contrastDarkLinkBg = chroma
+          .contrast("#252A36", values.linkDark)
+          .toFixed(2);
 
         // Call the callback function with the desired color and contrast
         if (onPaletteGenerated) {
-          onPaletteGenerated(values.link, values.linkDark, contrastLinkBg, contrastDarkLinkBg);
+          onPaletteGenerated(
+            values.link,
+            values.linkDark,
+            contrastLinkBg,
+            contrastDarkLinkBg,
+            primaryMain,
+
+            secondaryMain,
+            primaryBorder,
+            contrastTextColorPrimary,
+            contrastTextColorSecondary
+          );
         }
-       
+
         resolve();
       }, 1000);
     });
   }
 
   const getPalette = (color) => {
-    const colors = chroma.scale(["white", color, "black"]).colors(10);
+    // Generate tints and shades of the color
+    const scale = chroma
+      .scale([
+        chroma(color).set("hsl.l", 0.9), // Lighter tint
+        color,
+        chroma(color).set("hsl.l", 0.1), // Darker shade
+      ])
+      .mode("lab");
+
+    // Generate an array of 10 colors
+    const colors = scale.colors(10);
+
     return colors.map((c) => chroma(c).hex());
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate >
-        <VStack spacing={6} align="stretch" >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <VStack spacing={6} align="stretch">
           <Divider />
-          {/* <Alert status="info" fontSize="sm">
-            <AlertIcon />
-            test
-          </Alert> */}
-          {/* <Alert status="error" fontSize="sm" id="alert-link">
-              <AlertIcon />
-              Link color on light background should have a contrast ratio of at least 4.5:1.
-            </Alert> */}
 
-          <FormControl isInvalid={errors.brandLogo} isRequired >
+          <FormControl isInvalid={errors.brandLogo} isRequired>
             <FormLabel htmlFor="brand-logo">Organization logo</FormLabel>
-            
+
             <Textarea
               id="brand-logo"
               resize={"none"}
@@ -318,11 +335,10 @@ export default function HookForm({ onPaletteGenerated }) {
                 id="logoWidth"
                 name="logoWidth"
                 {...register("logoWidth")}
-              /> <InputRightAddon>px</InputRightAddon>
+              />{" "}
+              <InputRightAddon>px</InputRightAddon>
             </InputGroup>
-            <FormHelperText>
-             Size of the brand's logo in emails
-            </FormHelperText>
+            <FormHelperText>Size of the brand's logo in emails</FormHelperText>
             <FormErrorMessage>
               {errors.logoWidth && errors.logoWidth.message}
             </FormErrorMessage>
@@ -430,9 +446,7 @@ export default function HookForm({ onPaletteGenerated }) {
                 })}
               />
             </InputGroup>
-            <FormHelperText>
-              For links on dark background
-            </FormHelperText>
+            <FormHelperText>For links on dark background</FormHelperText>
             <FormErrorMessage>
               {errors.linkDark && errors.linkDark.message}
             </FormErrorMessage>
@@ -635,19 +649,20 @@ export default function HookForm({ onPaletteGenerated }) {
             <>
               <FormControl>
                 <FormLabel htmlFor="product-name">Product name</FormLabel>
-                <Input id="product-name" placeholder="Passthrough" {...register("productName", {
-
-                })} />
+                <Input
+                  id="product-name"
+                  placeholder="Passthrough"
+                  {...register("productName", {})}
+                />
               </FormControl>
 
-              <FormControl isInvalid={errors.favicon} >
+              <FormControl isInvalid={errors.favicon}>
                 <FormLabel htmlFor="favicon">Favicon URL</FormLabel>
                 <Textarea
                   id="favicon"
                   resize={"none"}
                   placeholder="https://app.passthrough.com/passthrough_prod_emails/..."
-                  {...register("favicon", {
-                  })}
+                  {...register("favicon", {})}
                 />
                 <FormHelperText>
                   Must be uploaded to prod.<br></br> URL should start with{" "}
@@ -657,7 +672,6 @@ export default function HookForm({ onPaletteGenerated }) {
                   {errors.favicon && errors.favicon.message}
                 </FormErrorMessage>
               </FormControl>
-
 
               <FormControl isInvalid={errors.kustomerId}>
                 <FormLabel htmlFor="kustomer-id">Kustomer brand ID</FormLabel>
@@ -674,7 +688,10 @@ export default function HookForm({ onPaletteGenerated }) {
                     },
                   })}
                 />
-                <FormHelperText>This ID controls the Kustomer widget in Passthrough. <br></br>It must be created in Kustomer first.</FormHelperText>
+                <FormHelperText>
+                  This ID controls the Kustomer widget in Passthrough. <br></br>
+                  It must be created in Kustomer first.
+                </FormHelperText>
                 <FormErrorMessage>
                   {errors.kustomerId && errors.kustomerId.message}
                 </FormErrorMessage>
