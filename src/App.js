@@ -22,15 +22,24 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
 function App() {
   const [isCopied, setIsCopied] = useState(false);
-  const [paletteColor2, setPaletteColor2] = useState(""); // State for palette color 2
-  const [primaryMain, setPrimaryMain] = useState(""); // State for Primary Main
-  const [secondaryMain, setSecondaryMain] = useState(""); // State for Secondary Main
-  const [primaryBorder, setPrimaryBorder] = useState(""); // State for palette color 1
-  const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(""); // State for Contrast text for primary
-  const [contrastTextColorSecondary, setContrastTextColorSecondary] =
-    useState(""); // State for Contrast text for secondary
+  const [primaryMain, setPrimaryMain] = useState(""); // State for Primary.main
+  const [secondaryMain, setSecondaryMain] = useState(""); // State for Secondary.main
+  const [primaryLight, setPrimaryLight] = useState(""); // State for primary.light
+  const [primaryFill, setPrimaryFill] = useState(""); // State for primary.fill
+  const [primaryBorder, setPrimaryBorder] = useState(""); // State for primary.border
+  const [primaryDark, setPrimaryDark] = useState(""); // State for primary.dark
   const [contrastLinkBg, setContrastLinkBg] = useState(0); // State for contrast
   const [contrastDarkLinkBg, setContrastDarkLinkBg] = useState(0); // State for contrast
+  const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(0); // State for Contrast text for primary
+  const [contrastTextColorSecondary, setContrastTextColorSecondary] =
+    useState(0); // State for Contrast text for secondary
+
+  const [statusUnsent, setStatusUnsent] = useState(""); // State for statusUnsent
+  const [statusSent, setStatusSent] = useState(""); // State for statusSent
+  const [statusNotStarted, setStatusNotStarted] = useState(""); // State for statusNotStarted
+  const [statusSigned, setStatusSigned] = useState(""); // State for statusSigned
+  const [statusApproved, setStatusApproved] = useState(""); // State for statusApproved
+  const [statusExecuted, setStatusExecuted] = useState(""); // State for statusExecuted
 
   const copyToClipboard = () => {
     const textArea = document.getElementById("formValuesTextArea");
@@ -46,24 +55,39 @@ function App() {
 
   // Callback function to handle palette color and contrast from HookForm
   const handlePaletteGenerated = (
-    color1,
-    color2,
     contrastLinkBg,
     contrastDarkLinkBg,
+    contrastTextColorPrimary,
+    contrastTextColorSecondary,
     primaryMain,
     secondaryMain,
+    primaryLight,
+    primaryFill,
     primaryBorder,
-    contrastTextColorPrimary,
-    contrastTextColorSecondary
+    primaryDark,
+    statusUnsent,
+    statusSent,
+    statusNotStarted,
+    statusSigned,
+    statusApproved,
+    statusExecuted
   ) => {
-    setPaletteColor2("#" + color2);
     setPrimaryMain("#" + primaryMain);
     setSecondaryMain("#" + secondaryMain);
+    setPrimaryLight(primaryLight);
+    setPrimaryFill(primaryFill);
     setPrimaryBorder(primaryBorder);
+    setPrimaryDark(primaryDark);
     setContrastTextColorPrimary(contrastTextColorPrimary);
     setContrastTextColorSecondary(contrastTextColorSecondary);
     setContrastLinkBg(contrastLinkBg);
     setContrastDarkLinkBg(contrastDarkLinkBg);
+    setStatusUnsent(statusUnsent);
+    setStatusSent(statusSent);
+    setStatusNotStarted(statusNotStarted);
+    setStatusSigned(statusSigned);
+    setStatusApproved(statusApproved);
+    setStatusExecuted(statusExecuted);
   };
 
   return (
@@ -71,7 +95,8 @@ function App() {
       <Stack direction={"column"} gap={0}>
         <Stack
           direction={"row"}
-          minHeight="4rem"
+          minH={4}
+          minW={4}
           alignItems="center"
           gap={0}
           p={8}
@@ -92,13 +117,13 @@ function App() {
         </Stack>
 
         <Stack direction="row" gap={6} fontSize="xl" p={8}>
-          <Stack direction="column" gap={8} flex="1" align="start">
+          <Stack direction="column" gap={8} flex="1" align="start" >
             <Heading as="h2" size="md">
               1. ✍️ Fill out this form
             </Heading>
             <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
-          <Stack direction="column" flex="1" gap={12}>
+          <Stack direction="column" flex="1" gap={12} minW={64}>
             <VStack spacing={4} align="start">
               <Heading as="h2" size="md">
                 2. Check contrast
@@ -111,27 +136,27 @@ function App() {
                   color={
                     contrastLinkBg > 0 && contrastLinkBg < 4.5
                       ? "red.500"
-                      : "Black"
+                      : "inherit"
                   }
                 >
-                  Contrast(Link color on light background):
+                  Link color on <Text as='b'>light</Text> background:
                 </Text>
                 <HStack>
                   <Text
                     fontSize="LG"
                     color={
-                      contrastLinkBg > 0 && contrastLinkBg < 4.5
+                      contrastTextColorPrimary > 0 && contrastTextColorPrimary < 4.5
                         ? "red.500"
-                        : "Black"
+                        : "inherit"
                     }
                   >
-                    {contrastLinkBg}
+                    {contrastTextColorPrimary}
                   </Text>
-                  {contrastLinkBg > 0 &&
-                    (contrastLinkBg < 4.5 ? (
+                  {contrastTextColorPrimary > 0 &&
+                    (contrastTextColorPrimary < 4.5 ? (
                       <Text color="red.500">❌</Text>
                     ) : (
-                      <Text color="Black">✅</Text>
+                      <Text color="inherit">✅</Text>
                     ))}
                 </HStack>
               </VStack>
@@ -140,26 +165,26 @@ function App() {
                 <Text
                   fontSize="sm"
                   color={
-                    contrastDarkLinkBg && contrastDarkLinkBg < 4.5
+                    contrastTextColorSecondary && contrastTextColorSecondary < 4.5
                       ? "red.500"
-                      : "Black"
+                      : "inherit"
                   }
                 >
-                  Contrast(Link color on light background):
+                  Link color on <Text as='b'>dark</Text> background:
                 </Text>
                 <HStack>
                   <Text
                     fontSize="LG"
                     color={
-                      contrastDarkLinkBg && contrastDarkLinkBg < 4.5
+                      contrastTextColorSecondary && contrastTextColorSecondary < 4.5
                         ? "red.500"
-                        : "black"
+                        : "inherit"
                     }
                   >
-                    {contrastDarkLinkBg}
+                    {contrastTextColorSecondary}
                   </Text>
-                  {contrastDarkLinkBg > 0 &&
-                    (contrastDarkLinkBg < 4.5 ? (
+                  {contrastTextColorSecondary > 0 &&
+                    (contrastTextColorSecondary < 4.5 ? (
                       <Text color="red.500">❌</Text>
                     ) : (
                       <Text color="green.500">✅</Text>
@@ -212,9 +237,37 @@ function App() {
                     borderColor="gray.300"
                     color={contrastTextColorPrimary}
                   >
-                    Text
+                    Contrast text
                   </Center>
                 </GridItem>
+
+
+                <GridItem w="100%" colStart={2} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryLight}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={primaryLight}
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={3} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryFill}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={primaryFill}
+                  />
+                </GridItem>
+
                 <GridItem w="100%" colStart={4} rowStart={2}>
                   <Center
                     w="48px"
@@ -224,6 +277,19 @@ function App() {
                     bg={primaryBorder}
                     border="1px"
                     borderColor="gray.300"
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={6} rowStart={2}>
+                  <Center
+                    w="48px"
+                    h="48px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={primaryDark}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={primaryDark}
                   />
                 </GridItem>
                 <GridItem w="100%" colStart={4} rowStart={4}>
@@ -237,36 +303,131 @@ function App() {
                     borderColor="gray.300"
                     color={contrastTextColorSecondary}
                   >
-                    Text
+                    Contrast text
                   </Center>
                 </GridItem>
-                <GridItem w="100%" colStart={2} rowStart={2}>
+
+              </Grid>
+
+              <Heading as="h3" size="sm" bgColor='lightyellow'>Status colors</Heading>
+              <Grid bgColor='lightyellow'
+                fontSize="xs"
+                templateColumns="repeat(6, 1fr)"
+                gap={2}
+                alignItems={"center"}
+                textAlign={"center"}
+              >
+                <GridItem w="100%" colStart={1} rowStart={1}>
+                  <Text>Unsent</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={2} rowStart={1}>
+                  <Text>Sent</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={3} rowStart={1}>
+                  <Text>Not sent</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={4} rowStart={1}>
+                  <Text>Signed</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={5} rowStart={1}>
+                  <Text>Approved</Text>
+                </GridItem>
+                <GridItem w="100%" colStart={6} rowStart={1}>
+                  <Text>Executed</Text>
+                </GridItem>
+
+                <GridItem w="100%" colStart={1} rowStart={2}>
                   <Center
-                    w="48px"
-                    h="48px"
+                    w="24px"
+                    h="24px"
                     m={["auto"]}
                     borderRadius={100}
-                    bg={secondaryMain}
+                    bg={statusUnsent}
                     border="1px"
                     borderColor="gray.300"
-                    color={contrastTextColorSecondary}
+                    color={statusUnsent}
                   />
                 </GridItem>
+
+                <GridItem w="100%" colStart={2} rowStart={2}>
+                  <Center
+                    w="24px"
+                    h="24px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={statusSent}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={statusSent}
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={3} rowStart={2}>
+                  <Center
+                    w="24px"
+                    h="24px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={statusNotStarted}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={statusNotStarted}
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={4} rowStart={2}>
+                  <Center
+                    w="24px"
+                    h="24px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={statusSigned}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={statusSigned}
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={5} rowStart={2}>
+                  <Center
+                    w="24px"
+                    h="24px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={statusApproved}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={statusApproved}
+                  />
+                </GridItem>
+
+                <GridItem w="100%" colStart={6} rowStart={2}>
+                  <Center
+                    w="24px"
+                    h="24px"
+                    m={["auto"]}
+                    borderRadius={100}
+                    bg={statusExecuted}
+                    border="1px"
+                    borderColor="gray.300"
+                    color={statusExecuted}
+                  />
+                </GridItem>
+
               </Grid>
-              <VStack align="start" spacing={2} bgColor="lightyellow" w='100%'p={4}>
+
+              {/* <VStack align="start" spacing={2} bgColor="lightyellow" w='100%' p={4}> */}
                 {/* Display the palette color */}
-                <Text fontSize="xs" >FOR TESTING ONLY</Text>
-                <Text fontSize="sm">Generated Color1: {primaryBorder}</Text>
-                <Text fontSize="sm">Generated Color2: {paletteColor2}</Text>
-                <Text fontSize="sm">Primary: {primaryMain}</Text>
+                {/* <Text fontSize="xs" >FOR TESTING ONLY</Text>
+                <Text fontSize="sm">Primary.main: {primaryMain}</Text>
                 <Text fontSize="sm">Secondary: {secondaryMain}</Text>
-                <Text fontSize="sm">
-                  Contrast text: {contrastTextColorPrimary}
-                </Text>
-                <Text fontSize="sm">
-                  Contrast text: {contrastTextColorSecondary}
-                </Text>
-              </VStack>
+                <Text fontSize="sm">Primary.light: {primaryLight}</Text>
+                <Text fontSize="sm">Primary.fill: {primaryFill}</Text>
+                <Text fontSize="sm">Primary.border: {primaryBorder}</Text>
+                <Text fontSize="sm">Primary.dark: {primaryDark}</Text>
+                <Text fontSize="sm">Contrast text: {contrastTextColorPrimary}</Text>
+                <Text fontSize="sm">Contrast text: {contrastTextColorSecondary}</Text> */}
+              {/* </VStack> */}
             </VStack>
             <VStack spacing={4} align="start">
               <Stack

@@ -136,7 +136,16 @@ export default function HookForm({ onPaletteGenerated }) {
         const primaryMain = values.primaryMain;
         const palette = getPalette(primaryMain);
         const secondaryMain = values.secondaryMain;
+        const primaryLight = palette[0];
+        const primaryFill = palette[1];
         const primaryBorder = palette[3];
+        const primaryDark = palette[6];
+        const statusUnsent = values.statusUnsent || "";
+        const statusSent = values.statusSent || "";
+        const statusNotStarted = values.statusNotStarted || "";
+        const statusSigned = values.statusSigned || "";
+        const statusApproved = values.statusApproved || "";
+        const statusExecuted = values.statusExecuted || "";
         const productName = values.productName || "";
         const kustomerId = values.kustomerId || "";
         const favicon = values.favicon || "";
@@ -265,6 +274,30 @@ export default function HookForm({ onPaletteGenerated }) {
           .contrast("#252A36", values.linkDark)
           .toFixed(2);
 
+          console.log({
+            link: values.link,
+            linkDark: values.linkDark,
+            contrastLinkBg,
+            contrastDarkLinkBg,
+            primaryMain,
+            secondaryMain,
+            primaryLight,
+            primaryFill,
+            primaryBorder,
+            primaryDark,
+            contrastTextColorPrimary,
+            contrastTextColorSecondary,
+            statusUnsent,
+            statusSent,
+            statusNotStarted,
+            statusSigned,
+            statusApproved,
+            statusExecuted,
+          });
+          
+
+
+
         // Call the callback function with the desired color and contrast
         if (onPaletteGenerated) {
           onPaletteGenerated(
@@ -274,9 +307,18 @@ export default function HookForm({ onPaletteGenerated }) {
             contrastDarkLinkBg,
             primaryMain,
             secondaryMain,
+            primaryLight,
+            primaryFill,
             primaryBorder,
+            primaryDark,
             contrastTextColorPrimary,
-            contrastTextColorSecondary
+            contrastTextColorSecondary,
+            statusUnsent,
+            statusSent,
+            statusNotStarted,
+            statusSigned,
+            statusApproved,
+            statusExecuted
           );
         }
 
