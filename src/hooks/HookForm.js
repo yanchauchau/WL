@@ -44,19 +44,19 @@ export default function HookForm({ onPaletteGenerated }) {
     getValues,
   } = useForm({
     defaultValues: {
-      // brandLogo:
-      //   "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
+      brandLogo:
+        "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
       logoWidth: "160",
-      // primaryMain: "FF9800",
-      // secondaryMain: "F7C164",
-      // link: "3A72F2",
-      // linkDark: "5CB06D",
-      // statusUnsent: "ccd0d7",
-      // statusSent: "FF9800",
-      // statusNotStarted: "F7C164",
-      // statusSigned: "9ABAEF",
-      // statusApproved: "3A72F2",
-      // statusExecuted: "5CB06D",
+      primaryMain: "22C55E",
+      secondaryMain: "565D96",
+      link: "3A72F2",
+      linkReverse: "CCD8E6",
+      statusUnsent: "ccd0d7",
+      statusSent: "FF9800",
+      statusNotStarted: "F7C164",
+      statusSigned: "9ABAEF",
+      statusApproved: "3A72F2",
+      statusExecuted: "5CB06D",
     },
   });
 
@@ -140,6 +140,8 @@ export default function HookForm({ onPaletteGenerated }) {
         const primaryFill = palette[1];
         const primaryBorder = palette[3];
         const primaryDark = palette[6];
+        const link = values.link;
+        const linkReverse = values.linkReverse;
         const statusUnsent = values.statusUnsent || "";
         const statusSent = values.statusSent || "";
         const statusNotStarted = values.statusNotStarted || "";
@@ -249,7 +251,7 @@ export default function HookForm({ onPaletteGenerated }) {
                           "main": "#${values.secondaryMain}",
                           "contrast_text": "${contrastTextColorSecondary}"
                       },
-                      "dark_mode_link": "#${values.linkDark}",
+                      "dark_mode_link": "#${values.linkReverse}",
                       "investor_closing_status": {
                          "unsent": "${values.statusUnsent}",
                           "sent": "${values.statusSent}",
@@ -267,50 +269,45 @@ export default function HookForm({ onPaletteGenerated }) {
         }
 
         // Calculate contrast between Passthrough background and link(light)
-        const contrastLinkBg = chroma
-          .contrast("#F9FAFB", values.link)
-          .toFixed(2);
-        const contrastDarkLinkBg = chroma
-          .contrast("#252A36", values.linkDark)
+        const RatioLink = chroma.contrast("#F9FAFB", values.link).toFixed(2);
+        const RatioLinkReverse = chroma
+          .contrast("#252A36", values.linkReverse)
           .toFixed(2);
 
-          console.log({
-            link: values.link,
-            linkDark: values.linkDark,
-            contrastLinkBg,
-            contrastDarkLinkBg,
-            primaryMain,
-            secondaryMain,
-            primaryLight,
-            primaryFill,
-            primaryBorder,
-            primaryDark,
-            contrastTextColorPrimary,
-            contrastTextColorSecondary,
-            statusUnsent,
-            statusSent,
-            statusNotStarted,
-            statusSigned,
-            statusApproved,
-            statusExecuted,
-          });
-          
-
-
+        console.log({
+          primaryMain,
+          secondaryMain,
+          primaryLight,
+          primaryFill,
+          primaryBorder,
+          primaryDark,
+          link: values.link,
+          linkReverse: values.linkReverse,
+          RatioLink,
+          RatioLinkReverse,
+          contrastTextColorPrimary,
+          contrastTextColorSecondary,
+          statusUnsent,
+          statusSent,
+          statusNotStarted,
+          statusSigned,
+          statusApproved,
+          statusExecuted,
+        });
 
         // Call the callback function with the desired color and contrast
         if (onPaletteGenerated) {
           onPaletteGenerated(
-            values.link,
-            values.linkDark,
-            contrastLinkBg,
-            contrastDarkLinkBg,
             primaryMain,
             secondaryMain,
             primaryLight,
             primaryFill,
             primaryBorder,
             primaryDark,
+            link,
+            linkReverse,
+            RatioLink,
+            RatioLinkReverse,
             contrastTextColorPrimary,
             contrastTextColorSecondary,
             statusUnsent,
@@ -465,15 +462,15 @@ export default function HookForm({ onPaletteGenerated }) {
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={errors.linkDark} isRequired>
+          <FormControl isInvalid={errors.linkReverse} isRequired>
             <FormLabel>Link (reverse)</FormLabel>
             <InputGroup>
               <InputLeftAddon>#</InputLeftAddon>
               <Input
-                id="linkDark-color"
-                name="linkDark"
+                id="linkReverse-color"
+                name="linkReverse"
                 placeholder="000000"
-                {...register("linkDark", {
+                {...register("linkReverse", {
                   required: "This field is required",
                   pattern: /^[a-zA-Z0-9]*$/,
                   minLength: {
@@ -489,7 +486,7 @@ export default function HookForm({ onPaletteGenerated }) {
             </InputGroup>
             <FormHelperText>For links on dark background</FormHelperText>
             <FormErrorMessage>
-              {errors.linkDark && errors.linkDark.message}
+              {errors.linkReverse && errors.linkReverse.message}
             </FormErrorMessage>
           </FormControl>
 

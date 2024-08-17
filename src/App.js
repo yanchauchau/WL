@@ -27,13 +27,13 @@ function App() {
   const [primaryLight, setPrimaryLight] = useState(""); // State for primary.light
   const [primaryFill, setPrimaryFill] = useState(""); // State for primary.fill
   const [primaryBorder, setPrimaryBorder] = useState(""); // State for primary.border
+  const [link, setLink] = useState(""); // State for link color
+  const [linkReverse, setLinkReverse] = useState(""); // State for link reverse color
   const [primaryDark, setPrimaryDark] = useState(""); // State for primary.dark
-  const [contrastLinkBg, setContrastLinkBg] = useState(0); // State for contrast
-  const [contrastDarkLinkBg, setContrastDarkLinkBg] = useState(0); // State for contrast
-  const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(0); // State for Contrast text for primary
-  const [contrastTextColorSecondary, setContrastTextColorSecondary] =
-    useState(0); // State for Contrast text for secondary
-
+  const [RatioLink, setRatioLink] = useState(0); // State for contrast
+  const [RatioLinkReverse, setRatioLinkReverse] = useState(0); // State for contrast
+  const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(0); // State for Contrast text for primary color
+  const [contrastTextColorSecondary, setContrastTextColorSecondary] = useState(0); // State for Contrast text for secondary color
   const [statusUnsent, setStatusUnsent] = useState(""); // State for statusUnsent
   const [statusSent, setStatusSent] = useState(""); // State for statusSent
   const [statusNotStarted, setStatusNotStarted] = useState(""); // State for statusNotStarted
@@ -55,16 +55,18 @@ function App() {
 
   // Callback function to handle palette color and contrast from HookForm
   const handlePaletteGenerated = (
-    contrastLinkBg,
-    contrastDarkLinkBg,
-    contrastTextColorPrimary,
-    contrastTextColorSecondary,
     primaryMain,
     secondaryMain,
     primaryLight,
     primaryFill,
     primaryBorder,
     primaryDark,
+    link,
+    linkReverse,
+    RatioLink,
+    RatioLinkReverse,
+    contrastTextColorPrimary,
+    contrastTextColorSecondary,
     statusUnsent,
     statusSent,
     statusNotStarted,
@@ -78,10 +80,12 @@ function App() {
     setPrimaryFill(primaryFill);
     setPrimaryBorder(primaryBorder);
     setPrimaryDark(primaryDark);
+    setLink(link);
+    setLinkReverse(linkReverse);
+    setRatioLink(RatioLink);
+    setRatioLinkReverse(RatioLinkReverse);
     setContrastTextColorPrimary(contrastTextColorPrimary);
     setContrastTextColorSecondary(contrastTextColorSecondary);
-    setContrastLinkBg(contrastLinkBg);
-    setContrastDarkLinkBg(contrastDarkLinkBg);
     setStatusUnsent(statusUnsent);
     setStatusSent(statusSent);
     setStatusNotStarted(statusNotStarted);
@@ -134,7 +138,7 @@ function App() {
                 <Text
                   fontSize="sm"
                   color={
-                    contrastLinkBg > 0 && contrastLinkBg < 4.5
+                    RatioLink > 0 && RatioLink < 4.5
                       ? "red.500"
                       : "inherit"
                   }
@@ -416,39 +420,45 @@ function App() {
 
               </Grid>
 
-              {/* <VStack align="start" spacing={2} bgColor="lightyellow" w='100%' p={4}> */}
-                {/* Display the palette color */}
-                {/* <Text fontSize="xs" >FOR TESTING ONLY</Text>
+              <VStack align="start" spacing={2} bgColor="lightyellow" w='100%' p={4}>
+                Display the palette color */}
+                <Text fontSize="xs" >FOR TESTING ONLY</Text>
                 <Text fontSize="sm">Primary.main: {primaryMain}</Text>
                 <Text fontSize="sm">Secondary: {secondaryMain}</Text>
                 <Text fontSize="sm">Primary.light: {primaryLight}</Text>
                 <Text fontSize="sm">Primary.fill: {primaryFill}</Text>
                 <Text fontSize="sm">Primary.border: {primaryBorder}</Text>
                 <Text fontSize="sm">Primary.dark: {primaryDark}</Text>
-                <Text fontSize="sm">Contrast text: {contrastTextColorPrimary}</Text>
-                <Text fontSize="sm">Contrast text: {contrastTextColorSecondary}</Text> */}
-              {/* </VStack> */}
+                <Text fontSize="sm">Link color: {link}</Text>
+                <Text fontSize="sm">Link color (dark): {RatioLinkReverse}</Text>
+                <Text fontSize="sm">Ratio: {RatioLink}</Text>
+                <Text fontSize="sm">Ratio (reverse: {RatioLinkReverse}</Text>
+                <Text fontSize="sm">Contrast text using "contrastTextColorPrimary": {contrastTextColorPrimary}</Text>
+                <Text fontSize="sm">Contrast text: {contrastTextColorSecondary}</Text>
+                <Text fontSize="sm">Status unsent: {statusUnsent}</Text>
+              </VStack> 
             </VStack>
-            <VStack spacing={4} align="start">
+            <VStack spacing={4} align="space-between" h="100%">
               <Stack
-                id="json"
+              id="json-section"
                 direction="row"
                 gap={8}
                 justify={"space-between"}
-                p={0}
+                h="auto"
+            
               >
-                <Heading as="h2" size="md" w="100%">
+                <Heading as="h2" fontSize='lg' w="100%">
                   3. Copy JSON here
                 </Heading>
                 {isCopied ? (
-                  <Text fontSize="sm" color="teal.500">
+                  <Text fontSize="lg" color="teal.500">
                     Copied!
                   </Text>
                 ) : (
                   <Button
                     leftIcon={<FaRegCopy />}
                     colorScheme="teal"
-                    size="sm"
+                    size="md"
                     variant="outline"
                     onClick={copyToClipboard}
                   >
