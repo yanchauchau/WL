@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormControl,
   Input,
-  Divider,
   Textarea,
   Select,
   Checkbox,
@@ -344,7 +343,7 @@ export default function HookForm({ onPaletteGenerated }) {
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={6} align="stretch">
-          <Divider />
+   
 
           <FormControl isInvalid={errors.brandLogo} isRequired>
             <FormLabel htmlFor="brand-logo">Organization logo</FormLabel>

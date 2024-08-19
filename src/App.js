@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import HookForm from "./hooks/HookForm";
 import "./styles.css";
+
 import { FaRegCopy } from "react-icons/fa";
 import {
   ChakraProvider,
@@ -27,19 +28,23 @@ function App() {
   const [primaryLight, setPrimaryLight] = useState(""); // State for primary.light
   const [primaryFill, setPrimaryFill] = useState(""); // State for primary.fill
   const [primaryBorder, setPrimaryBorder] = useState(""); // State for primary.border
+  const [primaryDark, setPrimaryDark] = useState(""); // State for primary.dark
   const [link, setLink] = useState(""); // State for link color
   const [linkReverse, setLinkReverse] = useState(""); // State for link reverse color
-  const [primaryDark, setPrimaryDark] = useState(""); // State for primary.dark
-  const [RatioLink, setRatioLink] = useState(0); // State for contrast
-  const [RatioLinkReverse, setRatioLinkReverse] = useState(0); // State for contrast
+  const [ratioLink, setRatioLink] = useState(0); // State for contrast
+  const [ratioLinkReverse, setRatioLinkReverse] = useState(0); // State for contrast
   const [contrastTextColorPrimary, setContrastTextColorPrimary] = useState(0); // State for Contrast text for primary color
-  const [contrastTextColorSecondary, setContrastTextColorSecondary] = useState(0); // State for Contrast text for secondary color
+  const [contrastTextColorSecondary, setContrastTextColorSecondary] =
+    useState(0); // State for Contrast text for primary color
   const [statusUnsent, setStatusUnsent] = useState(""); // State for statusUnsent
   const [statusSent, setStatusSent] = useState(""); // State for statusSent
   const [statusNotStarted, setStatusNotStarted] = useState(""); // State for statusNotStarted
   const [statusSigned, setStatusSigned] = useState(""); // State for statusSigned
   const [statusApproved, setStatusApproved] = useState(""); // State for statusApproved
   const [statusExecuted, setStatusExecuted] = useState(""); // State for statusExecuted
+  
+  
+
 
   const copyToClipboard = () => {
     const textArea = document.getElementById("formValuesTextArea");
@@ -63,8 +68,8 @@ function App() {
     primaryDark,
     link,
     linkReverse,
-    RatioLink,
-    RatioLinkReverse,
+    ratioLink,
+    ratioLinkReverse,
     contrastTextColorPrimary,
     contrastTextColorSecondary,
     statusUnsent,
@@ -80,29 +85,29 @@ function App() {
     setPrimaryFill(primaryFill);
     setPrimaryBorder(primaryBorder);
     setPrimaryDark(primaryDark);
-    setLink(link);
-    setLinkReverse(linkReverse);
-    setRatioLink(RatioLink);
-    setRatioLinkReverse(RatioLinkReverse);
+    setLink("#" + link);
+    setLinkReverse("#" + linkReverse);
+    setRatioLink(ratioLink);
+    setRatioLinkReverse(ratioLinkReverse);
     setContrastTextColorPrimary(contrastTextColorPrimary);
     setContrastTextColorSecondary(contrastTextColorSecondary);
-    setStatusUnsent(statusUnsent);
-    setStatusSent(statusSent);
-    setStatusNotStarted(statusNotStarted);
-    setStatusSigned(statusSigned);
-    setStatusApproved(statusApproved);
-    setStatusExecuted(statusExecuted);
+    setStatusUnsent("#" + statusUnsent);
+    setStatusSent("#" + statusSent);
+    setStatusNotStarted("#" + statusNotStarted);
+    setStatusSigned("#" + statusSigned);
+    setStatusApproved("#" + statusApproved);
+    setStatusExecuted("#" + statusExecuted);
   };
 
   return (
     <ChakraProvider theme={theme}>
-      <Stack direction={"column"} gap={0}>
+      <Stack direction={"column"} >
         <Stack
           direction={"row"}
           minH={4}
           minW={4}
           alignItems="center"
-          gap={0}
+          gap={16}
           p={8}
         >
           <VStack align="start">
@@ -120,81 +125,122 @@ function App() {
           <ColorModeSwitcher justifySelf="flex-end" />
         </Stack>
 
-        <Stack direction="row" gap={6} fontSize="xl" p={8}>
-          <Stack direction="column" gap={8} flex="1" align="start" >
+        <Stack direction={"row"} ontSize="md" p={8}  spacing={8} >
+          <Stack id='step1' direction="column"  spacing={8} flex="1" align="start">
             <Heading as="h2" size="md">
               1. ✍️ Fill out this form
-            </Heading>
+            </Heading>      
             <HookForm onPaletteGenerated={handlePaletteGenerated} />
           </Stack>
-          <Stack direction="column" flex="1" gap={12} minW={64}>
-            <VStack spacing={4} align="start">
+          <Stack  id='step2' direction="column"  flex="1" minW={64} spacing={8}>
+            <VStack  align="start" spacing={8} >
               <Heading as="h2" size="md">
                 2. Check contrast
               </Heading>
+              <Grid
+                templateColumns="repeat(1fr, 2fr)"
+                gap={4}
+                alignItems={"center"}
+                textAlign={"center"}
+              >
+                <GridItem w="100%" colStart={1} rowStart={1}>
+                  <Center
+                    w="80px"
+                    h="48px"
+                    m="auto"
+                    borderRadius={4}
+                    bg="#F9FAFB"
+                    border="1px"
+                    borderColor="gray.300"
+                    color={link}
+                    fontSize="xs"
+                  >
+                    Link
+                  </Center>
+                  {/* <Text   bgColor={link}  color={link}
+                    fontSize="xs">new text</Text> */}
+                </GridItem>
 
+                <GridItem w="100%" colStart={1} rowStart={2}>
+                  <Center
+                    w="80px"
+                    h="48px"
+                    m="auto"
+                    borderRadius={4}
+                    bg="#252A36"
+                    border="1px"
+                    color={linkReverse}
+                    borderColor="gray.300"
+                    fontSize="xs"
+                  >
+                    Link (Reverse)
+                  </Center>
+                </GridItem>
+                <GridItem w="100%" colStart={2} rowStart={1}>
+                  <VStack align="start" gap={0}>
+                    <Text
+                      fontSize="sm"
+                      color={
+                        ratioLink > 0 && ratioLink < 4.5 ? "red.500" : "inherit"
+                      }
+                    >
+                      Link on <Text as="b">light</Text> background:
+                    </Text>
+                    <HStack>
+                      <Text
+                        fontSize="LG"
+                        color={
+                          ratioLink > 0 && ratioLink < 4.5
+                            ? "red.500"
+                            : "inherit"
+                        }
+                      >
+                        {ratioLink}
+                      </Text>
+                      {ratioLink > 0 &&
+                        (ratioLink < 4.5 ? (
+                          <Text color="red.500">❌</Text>
+                        ) : (
+                          <Text color="inherit">✅</Text>
+                        ))}
+                    </HStack>
+                  </VStack>
+                </GridItem>
+
+                <GridItem w="100%" colStart={2} rowStart={2}>
+                  <VStack align="start" gap={0}>
+                    <Text
+                      fontSize="sm"
+                      color={
+                        ratioLinkReverse && ratioLinkReverse < 4.5
+                          ? "red.500"
+                          : "inherit"
+                      }
+                    >
+                      Link (Reverse) on <Text as="b">dark</Text> background:
+                    </Text>
+                    <HStack>
+                      <Text
+                        fontSize="LG"
+                        color={
+                          ratioLinkReverse && ratioLinkReverse < 4.5
+                            ? "red.500"
+                            : "inherit"
+                        }
+                      >
+                        {ratioLinkReverse}
+                      </Text>
+                      {ratioLinkReverse > 0 &&
+                        (ratioLinkReverse < 4.5 ? (
+                          <Text color="red.500">❌</Text>
+                        ) : (
+                          <Text color="green.500">✅</Text>
+                        ))}
+                    </HStack>
+                  </VStack>
+                </GridItem>
+              </Grid>
               {/* Display the contrast */}
-              <VStack align="start" gap={0}>
-                <Text
-                  fontSize="sm"
-                  color={
-                    RatioLink > 0 && RatioLink < 4.5
-                      ? "red.500"
-                      : "inherit"
-                  }
-                >
-                  Link color on <Text as='b'>light</Text> background:
-                </Text>
-                <HStack>
-                  <Text
-                    fontSize="LG"
-                    color={
-                      contrastTextColorPrimary > 0 && contrastTextColorPrimary < 4.5
-                        ? "red.500"
-                        : "inherit"
-                    }
-                  >
-                    {contrastTextColorPrimary}
-                  </Text>
-                  {contrastTextColorPrimary > 0 &&
-                    (contrastTextColorPrimary < 4.5 ? (
-                      <Text color="red.500">❌</Text>
-                    ) : (
-                      <Text color="inherit">✅</Text>
-                    ))}
-                </HStack>
-              </VStack>
-
-              <VStack align="start" gap={0}>
-                <Text
-                  fontSize="sm"
-                  color={
-                    contrastTextColorSecondary && contrastTextColorSecondary < 4.5
-                      ? "red.500"
-                      : "inherit"
-                  }
-                >
-                  Link color on <Text as='b'>dark</Text> background:
-                </Text>
-                <HStack>
-                  <Text
-                    fontSize="LG"
-                    color={
-                      contrastTextColorSecondary && contrastTextColorSecondary < 4.5
-                        ? "red.500"
-                        : "inherit"
-                    }
-                  >
-                    {contrastTextColorSecondary}
-                  </Text>
-                  {contrastTextColorSecondary > 0 &&
-                    (contrastTextColorSecondary < 4.5 ? (
-                      <Text color="red.500">❌</Text>
-                    ) : (
-                      <Text color="green.500">✅</Text>
-                    ))}
-                </HStack>
-              </VStack>
             </VStack>
 
             <VStack spacing={4} align="start">
@@ -244,8 +290,6 @@ function App() {
                     Contrast text
                   </Center>
                 </GridItem>
-
-
                 <GridItem w="100%" colStart={2} rowStart={2}>
                   <Center
                     w="48px"
@@ -258,7 +302,6 @@ function App() {
                     color={primaryLight}
                   />
                 </GridItem>
-
                 <GridItem w="100%" colStart={3} rowStart={2}>
                   <Center
                     w="48px"
@@ -271,7 +314,6 @@ function App() {
                     color={primaryFill}
                   />
                 </GridItem>
-
                 <GridItem w="100%" colStart={4} rowStart={2}>
                   <Center
                     w="48px"
@@ -283,7 +325,6 @@ function App() {
                     borderColor="gray.300"
                   />
                 </GridItem>
-
                 <GridItem w="100%" colStart={6} rowStart={2}>
                   <Center
                     w="48px"
@@ -310,11 +351,12 @@ function App() {
                     Contrast text
                   </Center>
                 </GridItem>
-
               </Grid>
 
-              <Heading as="h3" size="sm" bgColor='lightyellow'>Status colors</Heading>
-              <Grid bgColor='lightyellow'
+              <Heading as="h3" size="sm">
+                Status colors
+              </Heading>
+              <Grid
                 fontSize="xs"
                 templateColumns="repeat(6, 1fr)"
                 gap={2}
@@ -417,12 +459,17 @@ function App() {
                     color={statusExecuted}
                   />
                 </GridItem>
-
               </Grid>
 
-              <VStack align="start" spacing={2} bgColor="lightyellow" w='100%' p={4}>
-                Display the palette color */}
-                <Text fontSize="xs" >FOR TESTING ONLY</Text>
+              {/* <VStack
+                id="for-testing-only"
+                align="start"
+                spacing={2}
+                bgColor="lightyellow"
+                w="100%"
+                p={4}
+              >
+                <Text fontSize="xs">FOR TESTING ONLY</Text>
                 <Text fontSize="sm">Primary.main: {primaryMain}</Text>
                 <Text fontSize="sm">Secondary: {secondaryMain}</Text>
                 <Text fontSize="sm">Primary.light: {primaryLight}</Text>
@@ -430,49 +477,53 @@ function App() {
                 <Text fontSize="sm">Primary.border: {primaryBorder}</Text>
                 <Text fontSize="sm">Primary.dark: {primaryDark}</Text>
                 <Text fontSize="sm">Link color: {link}</Text>
-                <Text fontSize="sm">Link color (dark): {RatioLinkReverse}</Text>
-                <Text fontSize="sm">Ratio: {RatioLink}</Text>
-                <Text fontSize="sm">Ratio (reverse: {RatioLinkReverse}</Text>
-                <Text fontSize="sm">Contrast text using "contrastTextColorPrimary": {contrastTextColorPrimary}</Text>
-                <Text fontSize="sm">Contrast text: {contrastTextColorSecondary}</Text>
+                <Text fontSize="sm">Link color (reverse): {linkReverse}</Text>
+                <Text fontSize="sm">Ratio: {ratioLink}</Text>
+                <Text fontSize="sm">Ratio (reverse): {ratioLinkReverse}</Text>
+                <Text fontSize="sm">
+                  Contrast text (Primary): {contrastTextColorPrimary}
+                </Text>
+                <Text fontSize="sm">
+                  Contrast text (Secondary): {contrastTextColorSecondary}
+                </Text>
                 <Text fontSize="sm">Status unsent: {statusUnsent}</Text>
-              </VStack> 
+              </VStack> */}
             </VStack>
-            <VStack spacing={4} align="space-between" h="100%">
-              <Stack
+          </Stack>
+          <Stack id='step3' direction="column" spacing={6} flex="1" align="start">
+            <Stack
               id="json-section"
-                direction="row"
-                gap={8}
-                justify={"space-between"}
-                h="auto"
-            
-              >
-                <Heading as="h2" fontSize='lg' w="100%">
-                  3. Copy JSON here
-                </Heading>
-                {isCopied ? (
-                  <Text fontSize="lg" color="teal.500">
-                    Copied!
-                  </Text>
-                ) : (
-                  <Button
-                    leftIcon={<FaRegCopy />}
-                    colorScheme="teal"
-                    size="md"
-                    variant="outline"
-                    onClick={copyToClipboard}
-                  >
-                    Copy
-                  </Button>
-                )}
-              </Stack>
-              <Textarea
-                id="formValuesTextArea"
-                placeholder=""
-                rows="20"
-                cols="1"
-              />
-            </VStack>
+              direction="row"
+              justify={"space-between"}
+              h="auto"
+              w="100%"
+            >
+                <Heading as="h2" size="md">
+                3. Copy JSON here
+              </Heading>
+              
+              {isCopied ? (
+                <Text fontSize="md" color="teal.500">
+                  Copied!
+                </Text>
+              ) : (
+                <Button
+                  leftIcon={<FaRegCopy />}
+                  colorScheme="teal"
+                  size="sm"
+                  variant="outline"
+                  onClick={copyToClipboard}
+                >
+                  Copy
+                </Button>
+              )}
+            </Stack>
+            <Textarea
+              id="formValuesTextArea"
+              placeholder=""
+              rows="20"
+              cols="1"
+            />
           </Stack>
         </Stack>
       </Stack>
