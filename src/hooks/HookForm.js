@@ -43,13 +43,13 @@ export default function HookForm({ onPaletteGenerated }) {
     getValues,
   } = useForm({
     defaultValues: {
-      brandLogo:
-        "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
+      // brandLogo:
+      //   "https://app.passthrough.com/passthrough_prod_emails/preferred_return_logo.png",
       logoWidth: "160",
-      primaryMain: "22C55E",
-      secondaryMain: "565D96",
-      link: "3A72F2",
-      linkReverse: "CCD8E6",
+      // primaryMain: "22C55E",
+      // secondaryMain: "565D96",
+      // link: "3A72F2",
+      // linkReverse: "CCD8E6",
       statusUnsent: "ccd0d7",
       statusSent: "FF9800",
       statusNotStarted: "F7C164",

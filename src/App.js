@@ -119,7 +119,7 @@ function App() {
             >
               White label JSON generator
             </Heading>
-            <Text fontSize="xs">Last updated on 07 Aug 2024</Text>
+            <Text fontSize="xs">Last updated on 20 Aug 2024</Text>
           </VStack>
           <Spacer />
           <ColorModeSwitcher justifySelf="flex-end" />
@@ -135,7 +135,7 @@ function App() {
           <Stack  id='step2' direction="column"  flex="1" minW={64} spacing={8}>
             <VStack  align="start" spacing={8} >
               <Heading as="h2" size="md">
-                2. Check contrast
+                2. Check contrast ratios
               </Heading>
               <Grid
                 templateColumns="repeat(1fr, 2fr)"
