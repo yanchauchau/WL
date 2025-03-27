@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "https://yanchauchau.github.io/Whitelabel",
+  "homepage": "https://yanchauchau.github.io/WL",
   "private": true,
   "dependencies": {
     "@bhch/react-json-form": "^2.13.5",
